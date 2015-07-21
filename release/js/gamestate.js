@@ -27,7 +27,11 @@ gamestate.render = function() {
 
   switch(gamestate.current_state) {
     case gamestate.STATE_PLAY:
-      bitfont.render("Game State Ready", game_main.UI_MARGIN, game_main.UI_MARGIN, bitfont.JUSTIFY_LEFT);
+      bitfont.render("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", 8, 8, bitfont.JUSTIFY_LEFT);
+      bitfont.render("the quick brown fox jumps over the lazy dog", 8, 20, bitfont.JUSTIFY_LEFT);
+      bitfont.render("SPHINX OF BLACK QUARTZ, JUDGE MY VOW!", 8, 32, bitfont.JUSTIFY_LEFT);
+      bitfont.render("sphinx of black quartz, judge my vow!", 8, 44, bitfont.JUSTIFY_LEFT);
+      
       break;      
   }
   

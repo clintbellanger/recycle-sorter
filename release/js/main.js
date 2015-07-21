@@ -51,6 +51,7 @@ game_main.init = function() {
 }
 
 game_main.clear_canvas = function() {
+  game_main.ctx.fillStyle = "#888888";
   game_main.ctx.fillRect(0, 0, game_main.VIEW_WIDTH * game_main.SCALE, game_main.VIEW_HEIGHT * game_main.SCALE);
 }
 
