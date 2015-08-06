@@ -45,7 +45,8 @@ game_main.init = function() {
   inputs.init();
   imageset.init();
   bitfont.init();
-  gamestate.init(); 
+  items.init();
+  gamestate.init();
   
   game_main.init_complete = true;
 }

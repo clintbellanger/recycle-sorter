@@ -15,6 +15,7 @@ gamestate.logic = function() {
   switch(gamestate.current_state) {
     case gamestate.STATE_PLAY:
       imageset.logic();
+      items.logic();
       break;
       
   }
@@ -31,7 +32,7 @@ gamestate.render = function() {
       bitfont.render("the quick brown fox jumps over the lazy dog", 8, 20, bitfont.JUSTIFY_LEFT);
       bitfont.render("SPHINX OF BLACK QUARTZ, JUDGE MY VOW!", 8, 32, bitfont.JUSTIFY_LEFT);
       bitfont.render("sphinx of black quartz, judge my vow!", 8, 44, bitfont.JUSTIFY_LEFT);
-      
+      items.render();
       break;      
   }
   
