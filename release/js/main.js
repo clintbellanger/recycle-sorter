@@ -29,8 +29,8 @@ game_main.init = function() {
     
   // Configure listening for player input
   if (window.addEventListener) {
-    window.addEventListener('keydown', inputs.handleKeyDown, true);
-    window.addEventListener('keyup', inputs.handleKeyUp, true);
+    //window.addEventListener('keydown', inputs.handleKeyDown, true);
+    //window.addEventListener('keyup', inputs.handleKeyUp, true);
     window.addEventListener('mousedown', inputs.handleMouseDown, true);
     window.addEventListener('mousemove', inputs.handleMouseMove, true);
     window.addEventListener('mouseup', inputs.handleMouseUp, true);

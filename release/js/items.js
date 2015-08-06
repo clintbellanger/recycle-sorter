@@ -33,7 +33,10 @@ items.init = function() {
 
   // current items on screen  
   items.ilist = new Array();  
-  
+
+  // info about the item being held  
+  items.grabbing = false;
+  items.grabbed_item = 0;
   
   items.new_countdown = 0;
 }
@@ -66,26 +69,52 @@ items.logic = function() {
     items.add_random();
     items.new_countdown = 100;
   }
-     
+  
+  items.grab_check();
+  items.release_check();
   items.move();
   items.bounds_check();
 }
 
 items.move = function() {
   var treadmill_left = 84;
-    
+  var treadmill_top = 192;
+  var falling;
+  
   // movement for all items
   for (var i=0; i < items.ilist.length; i++) {
- 
-    // check falling off end of treadmill
-    if (items.ilist[i].x + items.defs[items.ilist[i].itype].w < treadmill_left) {
-      items.ilist[i].dy++;
-    }
-  
-    // move at current speed
-    items.ilist[i].x += items.ilist[i].dx;
-    items.ilist[i].y += items.ilist[i].dy;
 
+    // the grabbed item moves with the cursor  
+    if (items.grabbing && i == items.grabbed_item) {
+    
+      // center item on cursor
+      items.ilist[i].x = inputs.mouse_pos.x - items.defs[items.ilist[i].itype].w/2;
+      items.ilist[i].y = inputs.mouse_pos.y - items.defs[items.ilist[i].itype].h/2;
+ 
+    }
+    else {
+  
+      falling = false;  
+      
+      // left of treadmill?
+      if (items.ilist[i].x + items.defs[items.ilist[i].itype].w < treadmill_left) {
+        falling = true;
+      }
+      
+      // above treadmill?
+      if (items.ilist[i].y + items.defs[items.ilist[i].itype].h < treadmill_top) {
+        falling = true;
+      }
+  
+      if (falling) {
+        items.ilist[i].dy++;
+      }
+      
+      // move at current speed
+      items.ilist[i].x += items.ilist[i].dx;
+      items.ilist[i].y += items.ilist[i].dy;
+
+    }
   }
 }
 
@@ -101,8 +130,49 @@ items.bounds_check = function() {
   }  
 }
 
+items.grab_check = function() {
 
+  // can't grab an item if already holding one
+  if (items.grabbing) return;
+  
+  // can't grab a new item if not touching
+  if (!inputs.pressing.mouse) return;
+    
+  var item_area = new Object();
+  var item_type;
+  for (var i=0; i < items.ilist.length; i++) {
+       
+    item_area.x = items.ilist[i].x;
+    item_area.y = items.ilist[i].y;
+    item_area.w = items.defs[items.ilist[i].itype].w;
+    item_area.h = items.defs[items.ilist[i].itype].h;
+    
+    if (utils.is_within(inputs.mouse_pos, item_area)) {
+    
+       // newly grabbed item
+       items.grabbing = true;
+       items.grabbed_item = i;
+       
+       // no longer self-speed
+       items.ilist[i].dx = 0;
+       items.ilist[i].dy = 0;
+       return;    
+    }    
+  }
 
+}
+
+items.release_check = function() {
+  
+  // can't drop an item if not holding one
+  if (!items.grabbing) return;
+
+  // can't release an item if still holding
+  if (inputs.pressing.mouse) return;
+
+  items.grabbing = false;
+
+}
 
 items.render = function() {
   for (var i=0; i < items.ilist.length; i++) {
