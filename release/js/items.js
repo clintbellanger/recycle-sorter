@@ -17,7 +17,7 @@ items.init = function() {
   items.defs[0]  = {name:"Water Bottle",  x:2,   y:17, w:15, h:45, rtype:items.recycle_types.PLASTIC};
   items.defs[1]  = {name:"Milk Jug",      x:19,  y:7,  w:39, h:55, rtype:items.recycle_types.PLASTIC};
   items.defs[2]  = {name:"Laundry Soap",  x:60,  y:18, w:36, h:44, rtype:items.recycle_types.PLASTIC};  
-  items.defs[3]  = {name:"Cardboard Box", x:98,  y:14, w:51, h:49, rtype:items.recycle_types.PAPER};
+  items.defs[3]  = {name:"Cardboard Box", x:98,  y:14, w:51, h:48, rtype:items.recycle_types.PAPER};
   items.defs[4]  = {name:"News Print",    x:151, y:34, w:53, h:28, rtype:items.recycle_types.PAPER};
   items.defs[5]  = {name:"Brown Bag",     x:206, y:16, w:35, h:46, rtype:items.recycle_types.PAPER}; 
   items.defs[6]  = {name:"Soda Bottle",   x:243, y:12, w:17, h:50, rtype:items.recycle_types.GLASS};
@@ -53,8 +53,9 @@ items.add_random = function() {
 }
 
 items.remove = function(item_id) {
-
-
+  items.ilist.splice(item_id,1);
+  
+  // TODO: update which one is being held
 }
 
 items.logic = function() {
@@ -65,11 +66,17 @@ items.logic = function() {
     items.add_random();
     items.new_countdown = 100;
   }
+     
+  items.move();
+  items.bounds_check();
+}
 
-  var treadmill_left = 80;
-  
+items.move = function() {
+  var treadmill_left = 84;
+    
+  // movement for all items
   for (var i=0; i < items.ilist.length; i++) {
-  
+ 
     // check falling off end of treadmill
     if (items.ilist[i].x + items.defs[items.ilist[i].itype].w < treadmill_left) {
       items.ilist[i].dy++;
@@ -82,6 +89,21 @@ items.logic = function() {
   }
 }
 
+items.bounds_check = function() {
+
+  for (var i = items.ilist.length-1; i >= 0; i--) {
+
+     // falling off bottom
+     if (items.ilist[i].y >= game_main.VIEW_HEIGHT) {     
+       items.remove(i);
+     }
+  
+  }  
+}
+
+
+
+
 items.render = function() {
   for (var i=0; i < items.ilist.length; i++) {
     items.render_single(i);
@@ -91,12 +113,26 @@ items.render = function() {
 items.render_single = function(item_id) {
   var itype = items.ilist[item_id].itype;
 
+  // default draw the full item, except when going into a bin
+  visible_height = items.defs[itype].h;
+
+  // check going into the landfill bin  
+  var treadmill_left = 84;
+  if (items.ilist[item_id].x + items.defs[items.ilist[item_id].itype].w < treadmill_left) {
+      
+    var landfill_top = 200;
+    if (items.ilist[item_id].y + items.defs[items.ilist[item_id].itype].h > landfill_top) {
+      visible_height = landfill_top - items.ilist[item_id].y;
+      if (visible_height < 0) return;
+    }
+  }
+  
   imageset.render(
      items.atlas,
      items.defs[itype].x,
      items.defs[itype].y,
      items.defs[itype].w,
-     items.defs[itype].h,
+     visible_height,
      items.ilist[item_id].x,
      items.ilist[item_id].y
   );
