@@ -10,7 +10,7 @@ items.init = function() {
     METAL: 4,
     LANDFILL: 5
   };
-
+  
   items.atlas = imageset.load("images/items.png");
   
   items.defs = new Array();
@@ -31,6 +31,13 @@ items.init = function() {
   items.defs[14] = {name:"Coffee Mug",    x:465, y:36, w:29, h:26, rtype:items.recycle_types.LANDFILL};
   items.defs[15] = {name:"Spray Can",     x:496, y:22, w:17, h:40, rtype:items.recycle_types.LANDFILL};
 
+  items.bins = new Array();
+  items.bins[0] = {name:"Plastic",  area: {x: -32, y: -32, w: 136, h: 112}, center_x: 56,  rtype:items.recycle_types.PLASTIC};
+  items.bins[1] = {name:"Paper",    area: {x: 104, y: -32, w: 96,  h: 112}, center_x: 152, rtype:items.recycle_types.PLASTIC};
+  items.bins[2] = {name:"Glass",    area: {x: 200, y: -32, w: 96,  h: 112}, center_x: 248, rtype:items.recycle_types.PLASTIC};
+  items.bins[3] = {name:"Metal",    area: {x: 296, y: -32, w: 136, h: 112}, center_x: 344, rtype:items.recycle_types.PLASTIC};
+  items.bins[4] = {name:"Landfill", area: {x: -32,   y: 0, w: 136, h: 112}, center_x: 40,  rtype:items.recycle_types.PLASTIC};
+    
   // current items on screen  
   items.ilist = new Array();  
 
@@ -77,6 +84,8 @@ items.logic = function() {
   items.release_check();
   items.move();
   items.bounds_check();
+  items.collect();
+  
 }
 
 items.move = function() {
@@ -215,7 +224,111 @@ items.release_check = function() {
   if (inputs.pressing.mouse) return;
 
   items.grabbing = false;
+  
+  // check tossing item upwards into bin
+  items.toss();  
+  
+}
 
+items.toss = function() {
+
+  var id = items.grabbed_item;
+  
+  // throw item that was just released?
+  var bins_bottom = 80;
+  if (items.ilist[id].y > bins_bottom) {
+    return; // not high enough to toss
+  }  
+
+  // find the closest target bin
+  var target_x = -1;
+  var target_bin = -1;
+  var item_x;
+  
+  for (var i=0; i<4; i++) {
+    item_x = items.ilist[id].x + (items.defs[items.ilist[id].itype].w / 2);
+        
+    if (utils.is_within({x:item_x, y:items.ilist[id].y}, items.bins[i].area)) {
+      console.log("closest bin is " + items.bins[i].name);
+      target_bin = i;
+      target_x = items.bins[i].center_x;
+    }    
+  }
+
+  if (target_bin == -1) return; // no nearby bin
+  
+  // find the initial y speed needed to reach this distance after gravity
+  var target_y = 8 - items.defs[items.ilist[id].itype].h;
+  var distance_y = items.ilist[id].y - target_y;          
+  
+  var initial_dy = 0;
+  var calc_distance = 0;
+     
+  while (calc_distance < distance_y) {
+    initial_dy++;
+    calc_distance += initial_dy;     
+  }     
+
+  items.ilist[id].dy = -1 * initial_dy;
+
+  
+  
+  // find the initial x speed needed to center the item above the bin
+  // note: because gravity is 1 px per frame,
+  // initial_dy is also the frame count for reaching the arc apex
+  
+  // how many extra frames for the item to fall into the bin?
+  // based on item height
+  calc_distance = 0;
+  var falling_dy = 0;  
+  
+  while (calc_distance < items.defs[items.ilist[id].itype].h + 8) {
+    falling_dy++;
+    calc_distance += falling_dy;
+  }
+  
+  items.ilist[id].dx = (target_x - item_x) / (initial_dy + falling_dy);
+  
+
+}
+
+
+items.collect = function() {
+  
+  var item_x;
+  var target_bin = -1;
+  var bins_top = 16;
+  var bins_bottom = 80;  
+  
+  // check recycle bins
+  for (var i=items.ilist.length-1; i >= 0; i--) {
+  
+    // some ways we know this is not collectible
+    // already below the top bins
+    if (items.ilist[i].y > bins_bottom) continue;
+    
+    // tossed above the top bins
+    if (items.ilist[i].y < bins_top) continue;
+    
+    // if item not falling, not ready to collect
+    if (items.ilist[i].dy <= 0) continue;
+  
+    // center of item's current position
+    item_x = items.ilist[i].x + (items.defs[items.ilist[i].itype].w / 2);
+    
+    for (var j=0; j<4; j++) {
+      if (utils.is_within({x:item_x, y:items.ilist[i].y}, items.bins[j].area)) {
+        target_bin = j;
+      }
+    }
+
+    if (target_bin == -1) continue;
+    
+    // collect
+    items.remove(i);
+    //console.log("Put an item in the " + items.bins[target_bin].name + " bin");
+    
+  }
 }
 
 items.render = function() {
@@ -245,6 +358,20 @@ items.render_single = function(item_id) {
     if (items.ilist[item_id].y + items.defs[items.ilist[item_id].itype].h > landfill_top) {
       visible_height = landfill_top - items.ilist[item_id].y;
       if (visible_height < 0) return;
+    }
+  }
+  
+  // check going into a recycle bin
+  var bins_top = 16;
+  var bins_bottom = 80;
+  
+  // if above the bins bottoms and falling,
+  if (items.ilist[item_id].y < bins_bottom && items.ilist[item_id].dy > 0) {
+  
+    // if below the top of the bin   
+    if (items.ilist[item_id].y + items.defs[items.ilist[item_id].itype].h > bins_top) {
+      visible_height = bins_top - items.ilist[item_id].y;
+      if (visible_height < 0) return;    
     }
   }
   
