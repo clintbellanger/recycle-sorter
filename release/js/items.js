@@ -181,13 +181,15 @@ items.grab_check = function() {
   var item_area = new Object();
   var item_type;
   
+  var grab_padding = 8; // extra border pixels to grab an item
+  
   // back to front so that we're grabbing the foremost item
   for (var i=items.ilist.length-1; i >= 0; i--) {
        
-    item_area.x = items.ilist[i].x;
-    item_area.y = items.ilist[i].y;
-    item_area.w = items.defs[items.ilist[i].itype].w;
-    item_area.h = items.defs[items.ilist[i].itype].h;
+    item_area.x = items.ilist[i].x - grab_padding;
+    item_area.y = items.ilist[i].y - grab_padding;
+    item_area.w = items.defs[items.ilist[i].itype].w + grab_padding + grab_padding;
+    item_area.h = items.defs[items.ilist[i].itype].h + grab_padding + grab_padding;
     
     if (utils.is_within(inputs.mouse_pos, item_area)) {
     
