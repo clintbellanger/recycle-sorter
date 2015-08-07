@@ -58,7 +58,10 @@ items.add_random = function() {
 items.remove = function(item_id) {
   items.ilist.splice(item_id,1);
   
-  // TODO: update which one is being held
+  // update the pointer to which one is being held
+  if (items.grabbing && items.grabbed_item > item_id) {
+    items.grabbed_item--;
+  }
 }
 
 items.logic = function() {
@@ -79,7 +82,13 @@ items.logic = function() {
 items.move = function() {
   var treadmill_left = 84;
   var treadmill_top = 192;
+  
+  // positional calculations
   var falling;
+  var on_treadmill;
+  var left_of_treadmill;
+  var above_treadmill;
+  var landing;
   
   // movement for all items
   for (var i=0; i < items.ilist.length; i++) {
@@ -93,27 +102,58 @@ items.move = function() {
  
     }
     else {
-  
-      falling = false;  
       
-      // left of treadmill?
+      // calculate game board positions
+      left_of_treadmill = false;
       if (items.ilist[i].x + items.defs[items.ilist[i].itype].w < treadmill_left) {
-        falling = true;
+        left_of_treadmill = true;
+      }
+
+      on_treadmill = false;      
+      if (items.ilist[i].y + items.defs[items.ilist[i].itype].h == treadmill_top) {
+        if (!left_of_treadmill) {
+          on_treadmill = true;
+        }
       }
       
-      // above treadmill?
+      above_treadmill = false;
       if (items.ilist[i].y + items.defs[items.ilist[i].itype].h < treadmill_top) {
-        falling = true;
+        if (!left_of_treadmill) {
+          above_treadmill = true;
+        }
       }
-  
+            
+      falling = !on_treadmill;
+      
+      // apply gravity
       if (falling) {
         items.ilist[i].dy++;
+      }
+      
+      landing = false;
+      if (falling && above_treadmill) {
+      
+        // will this item fall past the treadmill top this frame?
+        if (items.ilist[i].y + items.defs[items.ilist[i].itype].h + items.ilist[i].dy >= treadmill_top) {
+        
+           landing = true;
+           items.ilist[i].dy = treadmill_top - items.ilist[i].y - items.defs[items.ilist[i].itype].h;
+                   
+        }
       }
       
       // move at current speed
       items.ilist[i].x += items.ilist[i].dx;
       items.ilist[i].y += items.ilist[i].dy;
 
+      if (landing) {
+
+        // reset landed items to treadmill speed
+        items.ilist[i].dx = -1;
+        items.ilist[i].dy = 0;
+      
+      }
+      
     }
   }
 }
@@ -140,7 +180,9 @@ items.grab_check = function() {
     
   var item_area = new Object();
   var item_type;
-  for (var i=0; i < items.ilist.length; i++) {
+  
+  // back to front so that we're grabbing the foremost item
+  for (var i=items.ilist.length-1; i >= 0; i--) {
        
     item_area.x = items.ilist[i].x;
     item_area.y = items.ilist[i].y;
@@ -176,7 +218,14 @@ items.release_check = function() {
 
 items.render = function() {
   for (var i=0; i < items.ilist.length; i++) {
-    items.render_single(i);
+    if (!items.grabbing || items.grabbed_item !== i) {
+      items.render_single(i);
+    }
+  }
+  
+  // show the grabbed item in the foreground (draw last)
+  if (items.grabbing) {
+    items.render_single(items.grabbed_item);
   }
 }
 

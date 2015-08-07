@@ -140,11 +140,11 @@ inputs.clickCoord = function(evt) {
 inputs.handleTouchStart = function(evt) {
   evt.preventDefault();
   inputs.pressing.mouse = true;
-  inputs.mouse_pos = touchCoord(evt);
+  inputs.mouse_pos = inputs.touchCoord(evt);
 }
 
 inputs.handleTouchMove = function(evt) {
-  inputs.mouse_pos = touchCoord(evt);
+  inputs.mouse_pos = inputs.touchCoord(evt);
 }
 
 inputs.handleTouchEnd = function(evt) {
@@ -156,8 +156,8 @@ inputs.touchCoord = function(evt) {
   var canx = evt.touches[0].pageX;
   var cany = evt.touches[0].pageY;
   
-  canx -= can.offsetLeft;
-  cany -= can.offsetTop;
+  canx -= game_main.canv.offsetLeft;
+  cany -= game_main.canv.offsetTop;
   
   canx /= game_main.SCALE;
   cany /= game_main.SCALE;
