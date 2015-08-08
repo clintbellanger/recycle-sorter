@@ -51,8 +51,7 @@ gamestate.render = function() {
 
   switch(gamestate.current_state) {
   
-    case gamestate.state_types.PLAY:
-    case gamestate.state_types.GAME_OVER:
+    case gamestate.state_types.PLAY:    
     
       //bitfont.render("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", 8, 8, bitfont.JUSTIFY_LEFT);
       //bitfont.render("the quick brown fox jumps over the lazy dog", 8, 20, bitfont.JUSTIFY_LEFT);
@@ -61,9 +60,16 @@ gamestate.render = function() {
       items.render();
       scorekeeper.render();
       break;
+        
+    case gamestate.state_types.GAME_OVER:
+
+      items.render();
+      scorekeeper.render();
+      bitfont.render("Recycled " + scorekeeper.total_recycles + " items!", 200, 96, bitfont.JUSTIFY_CENTER);
+      bitfont.render("Refresh to try again.", 200, 112, bitfont.JUSTIFY_CENTER);
+      break;
       
-  }
-  
+   }
 }
 
 
