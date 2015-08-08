@@ -45,7 +45,7 @@ items.init = function() {
   items.grabbed_item = 0;
   
   items.new_countdown = 0;
-  items.delay_between_items = 100;
+  items.delay_between_items = 96;
   
   items.conveyor_moving = true;
 }

@@ -82,9 +82,12 @@ scorekeeper.verify = function(item_type, bin_type) {
     // points up!
     scorekeeper.total_recycles++;
     
-    // TEMP FUN: speed up on correct
-    if (items.delay_between_items > 2) {
+    // speed up the item flow (and difficulty)
+    if (items.delay_between_items > 64) {
       items.delay_between_items -= 2;
+    }
+    else if (items.delay_between_items > 32) {
+      items.delay_between_items -= 1;
     }
     
   }
