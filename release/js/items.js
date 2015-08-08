@@ -45,6 +45,9 @@ items.init = function() {
   items.grabbed_item = 0;
   
   items.new_countdown = 0;
+  items.delay_between_items = 100;
+  
+  items.conveyor_moving = true;
 }
 
 items.add_random = function() {
@@ -55,11 +58,13 @@ items.add_random = function() {
   new_item.itype = Math.floor(Math.random() * items.defs.length);
   new_item.x = game_main.VIEW_WIDTH -1;  
   new_item.y = treadmill_top - items.defs[new_item.itype].h;
-  new_item.dx = -1;
+
+  new_item.dx = items.conveyor_speed();  
   new_item.dy = 0;
   
   items.ilist.push(new_item);
 }
+
 
 items.remove = function(item_id) {
   items.ilist.splice(item_id,1);
@@ -72,11 +77,14 @@ items.remove = function(item_id) {
 
 items.logic = function() {
 
-  // check for adding new items
-  items.new_countdown--;
-  if (items.new_countdown <= 0) {
-    items.add_random();
-    items.new_countdown = 100;
+  if (items.conveyor_moving) {
+  
+    // check for adding new items
+    items.new_countdown--;
+    if (items.new_countdown <= 0) {
+      items.add_random();
+      items.new_countdown = items.delay_between_items;
+    }
   }
   
   items.grab_check();
@@ -86,6 +94,29 @@ items.logic = function() {
   items.collect();
   
 }
+
+items.logic_game_over = function() {
+
+  items.grabbing = false;
+    
+  for (var i=0; i < items.ilist.length; i++) {
+  
+    // continue gravity on all remaining items
+    items.ilist[i].dy++;
+    
+    // move all items
+    items.ilist[i].x += items.ilist[i].dx;
+    items.ilist[i].y += items.ilist[i].dy;
+  }
+  
+  items.bounds_check();
+}
+
+items.conveyor_speed = function() {
+  if (items.conveyor_moving) return -1;
+  else return 0;
+}
+
 
 items.move = function() {
   var treadmill_left = 84;
@@ -157,9 +188,9 @@ items.move = function() {
       if (landing) {
 
         // reset landed items to treadmill speed
-        items.ilist[i].dx = -1;
+        items.ilist[i].dx = items.conveyor_speed();  
         items.ilist[i].dy = 0;
-      
+        
       }
       
     }
@@ -168,12 +199,26 @@ items.move = function() {
 
 items.bounds_check = function() {
 
+  var remove_item;
+  
   for (var i = items.ilist.length-1; i >= 0; i--) {
 
-     // falling off bottom
-     if (items.ilist[i].y >= game_main.VIEW_HEIGHT) {     
-       items.remove(i);
-     }
+    remove_item = false;
+    
+    // falling off bottom
+    if (items.ilist[i].y >= game_main.VIEW_HEIGHT) { 
+      remove_item = true;          
+    }
+
+    if (remove_item) {
+    
+      // items that fall out of bounds are landfill
+      if (gamestate.current_state == gamestate.state_types.PLAY) {
+        scorekeeper.verify(items.ilist[i].itype, items.recycle_types.LANDFILL);
+      }
+        
+      items.remove(i);
+    }
   
   }  
 }
@@ -192,7 +237,7 @@ items.grab_check = function() {
   var grab_padding = 8; // extra border pixels to grab an item
   
   // back to front so that we're grabbing the foremost item
-  for (var i=items.ilist.length-1; i >= 0; i--) {
+  for (var i=0; i < items.ilist.length; i++) {
        
     item_hotspot.x = items.ilist[i].x - grab_padding;
     item_hotspot.y = items.ilist[i].y - grab_padding;
@@ -334,7 +379,7 @@ items.collect = function() {
 }
 
 items.render = function() {
-  for (var i=0; i < items.ilist.length; i++) {
+  for (var i = items.ilist.length-1; i >= 0; i--) {
     if (!items.grabbing || items.grabbed_item !== i) {
       items.render_single(i);
     }

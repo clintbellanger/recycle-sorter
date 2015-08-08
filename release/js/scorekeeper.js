@@ -37,11 +37,24 @@ scorekeeper.init = function() {
   scorekeeper.symbol_active[items.recycle_types.GLASS]    = {stype:scorekeeper.symbol_types.NONE, timer: 0};
   scorekeeper.symbol_active[items.recycle_types.METAL]    = {stype:scorekeeper.symbol_types.NONE, timer: 0};
   scorekeeper.symbol_active[items.recycle_types.LANDFILL] = {stype:scorekeeper.symbol_types.NONE, timer: 0};
-    
+  
+  scorekeeper.total_mistakes = 0;
+  scorekeeper.mistakes_to_game_over = 3;
+  
+  scorekeeper.total_recycles = 0;
+  
+  scorekeeper.end_game = false;
 }
 
 scorekeeper.logic = function() {
+   
+  if (scorekeeper.total_mistakes >= scorekeeper.mistakes_to_game_over) {
     
+    // instruct game_state to enter GAME_OVER    
+    scorekeeper.end_game = true;
+  }
+   
+  // animate bin symbols   
   for (var i=0; i < scorekeeper.symbol_active.length; i++) {
 
     // countdown the visibility duration
@@ -62,11 +75,27 @@ scorekeeper.verify = function(item_type, bin_type) {
 
   var correct = items.defs[item_type].rtype == bin_type;
   
-  if (correct) {
+  // show correct answer if recycling an item
+  if (correct && bin_type != items.recycle_types.LANDFILL) {
     scorekeeper.activate_symbol(scorekeeper.symbol_types.RECYCLE, bin_type);
+    
+    // points up!
+    scorekeeper.total_recycles++;
+    
+    // TEMP FUN: speed up on correct
+    if (items.delay_between_items > 2) {
+      items.delay_between_items--;
+    }
+    
   }
-  else {
+  
+  // show incorrect symbol if an item is placed where it does not belong
+  if (!correct) {
     scorekeeper.activate_symbol(scorekeeper.symbol_types.INCORRECT, bin_type);
+    
+    if (scorekeeper.total_mistakes < scorekeeper.mistakes_to_game_over) {
+      scorekeeper.total_mistakes++;
+    }
   }
   
 }
@@ -85,6 +114,8 @@ scorekeeper.render = function() {
       scorekeeper.render_symbol(scorekeeper.symbol_active[i].stype, i);
     }
   }
+  
+  scorekeeper.render_mistakes();
 }
 
 scorekeeper.render_symbol = function(symbol_type, bin_type) {
@@ -98,4 +129,20 @@ scorekeeper.render_symbol = function(symbol_type, bin_type) {
      scorekeeper.symbol_dest[bin_type].mid_x - scorekeeper.symbol_src[symbol_type].w/2,
      scorekeeper.symbol_dest[bin_type].mid_y - scorekeeper.symbol_src[symbol_type].h/2
   );
+}
+
+scorekeeper.render_mistakes = function() {
+
+  for (var i=0; i<scorekeeper.total_mistakes; i++) {
+    imageset.render(
+      scorekeeper.atlas,
+      scorekeeper.symbol_src[scorekeeper.symbol_types.INCORRECT].x,
+      scorekeeper.symbol_src[scorekeeper.symbol_types.INCORRECT].y,
+      scorekeeper.symbol_src[scorekeeper.symbol_types.INCORRECT].w,
+      scorekeeper.symbol_src[scorekeeper.symbol_types.INCORRECT].h,
+      360 - i * scorekeeper.symbol_src[scorekeeper.symbol_types.INCORRECT].w,
+      208
+    );
+  }
+
 }

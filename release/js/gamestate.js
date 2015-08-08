@@ -6,21 +6,40 @@
 var gamestate = new Object();
 
 gamestate.init = function() {
-  gamestate.STATE_PLAY = 0;
-  gamestate.current_state = gamestate.STATE_PLAY;
+
+  gamestate.state_types = {
+    TITLE: 0,
+    PLAY: 1,
+    GAME_OVER: 2
+  };
+    
+  gamestate.current_state = gamestate.state_types.PLAY;
   
   gamestate.background = imageset.load("images/background.png");
 }
  
 gamestate.logic = function() {
 
+
   switch(gamestate.current_state) {
-    case gamestate.STATE_PLAY:
+  
+    case gamestate.state_types.PLAY:
       imageset.logic();
       items.logic();
       scorekeeper.logic();
-      break;
       
+      // if this round has ended, move to the game over screen
+      if (scorekeeper.end_game) {
+        gamestate.current_state = gamestate.state_types.GAME_OVER;
+      }
+
+      break;
+  
+    case gamestate.state_types.GAME_OVER:
+      imageset.logic();
+      items.logic_game_over();
+      scorekeeper.logic();
+      break;
   }
   
 }
@@ -31,7 +50,10 @@ gamestate.render = function() {
   imageset.render(gamestate.background,0,0,400,240,0,0);
 
   switch(gamestate.current_state) {
-    case gamestate.STATE_PLAY:
+  
+    case gamestate.state_types.PLAY:
+    case gamestate.state_types.GAME_OVER:
+    
       //bitfont.render("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", 8, 8, bitfont.JUSTIFY_LEFT);
       //bitfont.render("the quick brown fox jumps over the lazy dog", 8, 20, bitfont.JUSTIFY_LEFT);
       //bitfont.render("SPHINX OF BLACK QUARTZ, JUDGE MY VOW!", 8, 32, bitfont.JUSTIFY_LEFT);
@@ -39,7 +61,9 @@ gamestate.render = function() {
       items.render();
       scorekeeper.render();
       break;
+      
   }
   
 }
+
 
