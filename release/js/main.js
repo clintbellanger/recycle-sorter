@@ -46,6 +46,7 @@ game_main.init = function() {
   imageset.init();
   bitfont.init();
   items.init();
+  scorekeeper.init();
   gamestate.init();
   
   game_main.init_complete = true;

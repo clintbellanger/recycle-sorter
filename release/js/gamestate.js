@@ -18,6 +18,7 @@ gamestate.logic = function() {
     case gamestate.STATE_PLAY:
       imageset.logic();
       items.logic();
+      scorekeeper.logic();
       break;
       
   }
@@ -36,7 +37,8 @@ gamestate.render = function() {
       //bitfont.render("SPHINX OF BLACK QUARTZ, JUDGE MY VOW!", 8, 32, bitfont.JUSTIFY_LEFT);
       //bitfont.render("sphinx of black quartz, judge my vow!", 8, 44, bitfont.JUSTIFY_LEFT);
       items.render();
-      break;      
+      scorekeeper.render();
+      break;
   }
   
 }

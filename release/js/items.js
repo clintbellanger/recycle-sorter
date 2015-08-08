@@ -3,12 +3,11 @@ var items = new Object();
 items.init = function() {
 
   items.recycle_types = {
-    OTHER: 0,
-    PLASTIC: 1,
-    PAPER: 2,
-    GLASS: 3,
-    METAL: 4,
-    LANDFILL: 5
+    PLASTIC: 0,
+    PAPER: 1,
+    GLASS: 2,
+    METAL: 3,
+    LANDFILL: 4
   };
   
   items.atlas = imageset.load("images/items.png");
@@ -32,11 +31,11 @@ items.init = function() {
   items.defs[15] = {name:"Spray Can",     x:496, y:22, w:17, h:40, rtype:items.recycle_types.LANDFILL};
 
   items.bins = new Array();
-  items.bins[0] = {name:"Plastic",  area: {x: -32, y: -32, w: 136, h: 112}, center_x: 56,  rtype:items.recycle_types.PLASTIC};
-  items.bins[1] = {name:"Paper",    area: {x: 104, y: -32, w: 96,  h: 112}, center_x: 152, rtype:items.recycle_types.PLASTIC};
-  items.bins[2] = {name:"Glass",    area: {x: 200, y: -32, w: 96,  h: 112}, center_x: 248, rtype:items.recycle_types.PLASTIC};
-  items.bins[3] = {name:"Metal",    area: {x: 296, y: -32, w: 136, h: 112}, center_x: 344, rtype:items.recycle_types.PLASTIC};
-  items.bins[4] = {name:"Landfill", area: {x: -32,   y: 0, w: 136, h: 112}, center_x: 40,  rtype:items.recycle_types.PLASTIC};
+  items.bins[items.recycle_types.PLASTIC]  = {name:"Plastic",  hotspot: {x: -32, y: -32, w: 136, h: 112}, center_x: 56 };
+  items.bins[items.recycle_types.PAPER]    = {name:"Paper",    hotspot: {x: 104, y: -32, w: 96,  h: 112}, center_x: 152};
+  items.bins[items.recycle_types.GLASS]    = {name:"Glass",    hotspot: {x: 200, y: -32, w: 96,  h: 112}, center_x: 248};
+  items.bins[items.recycle_types.METAL]    = {name:"Metal",    hotspot: {x: 296, y: -32, w: 136, h: 112}, center_x: 344};
+  items.bins[items.recycle_types.LANDFILL] = {name:"Landfill", hotspot: {x: -32, y: 0,   w: 136, h: 112}, center_x: 40 };
     
   // current items on screen  
   items.ilist = new Array();  
@@ -187,7 +186,7 @@ items.grab_check = function() {
   // can't grab a new item if not touching
   if (!inputs.pressing.mouse) return;
     
-  var item_area = new Object();
+  var item_hotspot = new Object();
   var item_type;
   
   var grab_padding = 8; // extra border pixels to grab an item
@@ -195,12 +194,12 @@ items.grab_check = function() {
   // back to front so that we're grabbing the foremost item
   for (var i=items.ilist.length-1; i >= 0; i--) {
        
-    item_area.x = items.ilist[i].x - grab_padding;
-    item_area.y = items.ilist[i].y - grab_padding;
-    item_area.w = items.defs[items.ilist[i].itype].w + grab_padding + grab_padding;
-    item_area.h = items.defs[items.ilist[i].itype].h + grab_padding + grab_padding;
+    item_hotspot.x = items.ilist[i].x - grab_padding;
+    item_hotspot.y = items.ilist[i].y - grab_padding;
+    item_hotspot.w = items.defs[items.ilist[i].itype].w + grab_padding + grab_padding;
+    item_hotspot.h = items.defs[items.ilist[i].itype].h + grab_padding + grab_padding;
     
-    if (utils.is_within(inputs.mouse_pos, item_area)) {
+    if (utils.is_within(inputs.mouse_pos, item_hotspot)) {
     
        // newly grabbed item
        items.grabbing = true;
@@ -248,8 +247,8 @@ items.toss = function() {
   for (var i=0; i<4; i++) {
     item_x = items.ilist[id].x + (items.defs[items.ilist[id].itype].w / 2);
         
-    if (utils.is_within({x:item_x, y:items.ilist[id].y}, items.bins[i].area)) {
-      console.log("closest bin is " + items.bins[i].name);
+    if (utils.is_within({x:item_x, y:items.ilist[id].y}, items.bins[i].hotspot)) {
+      // console.log("closest bin is " + items.bins[i].name);
       target_bin = i;
       target_x = items.bins[i].center_x;
     }    
@@ -271,23 +270,24 @@ items.toss = function() {
 
   items.ilist[id].dy = -1 * initial_dy;
 
-  
-  
   // find the initial x speed needed to center the item above the bin
   // note: because gravity is 1 px per frame,
   // initial_dy is also the frame count for reaching the arc apex
+  var rising_frames = initial_dy;
   
   // how many extra frames for the item to fall into the bin?
   // based on item height
   calc_distance = 0;
-  var falling_dy = 0;  
+  var falling_frames = 0;  
   
   while (calc_distance < items.defs[items.ilist[id].itype].h + 8) {
-    falling_dy++;
-    calc_distance += falling_dy;
+    falling_frames++;
+    calc_distance += falling_frames;
   }
   
-  items.ilist[id].dx = (target_x - item_x) / (initial_dy + falling_dy);
+  // we know how many frames this item will take to rise and fall into the bin
+  // calculate the x speed per frame to land right in the middle of the bin
+  items.ilist[id].dx = (target_x - item_x) / (rising_frames + falling_frames);
   
 
 }
@@ -317,15 +317,17 @@ items.collect = function() {
     item_x = items.ilist[i].x + (items.defs[items.ilist[i].itype].w / 2);
     
     for (var j=0; j<4; j++) {
-      if (utils.is_within({x:item_x, y:items.ilist[i].y}, items.bins[j].area)) {
+      if (utils.is_within({x:item_x, y:items.ilist[i].y}, items.bins[j].hotspot)) {
         target_bin = j;
       }
     }
 
     if (target_bin == -1) continue;
     
-    // collect
+    // collect this item
+    scorekeeper.verify(items.ilist[i].itype, target_bin);    
     items.remove(i);
+
     //console.log("Put an item in the " + items.bins[target_bin].name + " bin");
     
   }
