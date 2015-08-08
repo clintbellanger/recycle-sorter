@@ -84,7 +84,7 @@ scorekeeper.verify = function(item_type, bin_type) {
     
     // TEMP FUN: speed up on correct
     if (items.delay_between_items > 2) {
-      items.delay_between_items--;
+      items.delay_between_items -= 2;
     }
     
   }
