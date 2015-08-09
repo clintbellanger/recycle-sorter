@@ -65,8 +65,16 @@ gamestate.render = function() {
 
       items.render();
       scorekeeper.render();
+      
       bitfont.render("Recycled " + scorekeeper.total_recycles + " items!", 200, 96, bitfont.JUSTIFY_CENTER);
-      bitfont.render("Refresh to try again.", 200, 112, bitfont.JUSTIFY_CENTER);
+      
+      if (scorekeeper.new_high_score) {
+        bitfont.render("NEW HIGH SCORE!", 200, 112, bitfont.JUSTIFY_CENTER);        
+      }
+      else {
+        bitfont.render("High Score: " + scorekeeper.current_high_score, 200, 112, bitfont.JUSTIFY_CENTER);
+      }
+      bitfont.render("Refresh to try again.", 200, 128, bitfont.JUSTIFY_CENTER);
       break;
       
    }

@@ -44,14 +44,42 @@ scorekeeper.init = function() {
   scorekeeper.total_recycles = 0;
   
   scorekeeper.end_game = false;
+  scorekeeper.new_high_score = false;
+  scorekeeper.current_high_score = scorekeeper.load_high_score();
+  
+}
+
+/**
+ We only care to save the score if it's the high score
+ Save this in localStorage
+ */
+scorekeeper.save_score = function(recycle_count) {
+
+  scorekeeper.new_high_score = false;
+  
+  if (!localStorage.recycle_high_score) {
+    localStorage.recycle_high_score = recycle_count;
+  }
+  else if (recycle_count > Number(localStorage.recycle_high_score)) {
+    scorekeeper.new_high_score = true;
+    scorekeeper.current_high_score = recycle_count;
+    localStorage.recycle_high_score = recycle_count;
+  }
+  
+}
+
+scorekeeper.load_high_score = function() {
+  if (localStorage.recycle_high_score) return Number(localStorage.recycle_high_score);
+  else return 0;
 }
 
 scorekeeper.logic = function() {
    
-  if (scorekeeper.total_mistakes >= scorekeeper.mistakes_to_game_over) {
+  if (scorekeeper.total_mistakes >= scorekeeper.mistakes_to_game_over && scorekeeper.end_game == false) {
     
     // instruct game_state to enter GAME_OVER    
     scorekeeper.end_game = true;
+    scorekeeper.save_score(scorekeeper.total_recycles);
   }
    
   // animate bin symbols   
@@ -83,6 +111,7 @@ scorekeeper.verify = function(item_type, bin_type) {
     scorekeeper.total_recycles++;
     
     // speed up the item flow (and difficulty)
+    // TODO: move this to conveyor object?
     if (items.delay_between_items > 64) {
       items.delay_between_items -= 2;
     }
