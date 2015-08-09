@@ -59,6 +59,7 @@ scorekeeper.save_score = function(recycle_count) {
   
   if (!localStorage.recycle_high_score) {
     localStorage.recycle_high_score = recycle_count;
+    scorekeeper.current_high_score = recycle_count;
   }
   else if (recycle_count > Number(localStorage.recycle_high_score)) {
     scorekeeper.new_high_score = true;
