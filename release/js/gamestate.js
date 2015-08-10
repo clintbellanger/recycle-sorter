@@ -25,6 +25,7 @@ gamestate.logic = function() {
   
     case gamestate.state_types.PLAY:
       imageset.logic();
+      conveyor.logic();
       items.logic();
       scorekeeper.logic();
       
@@ -57,13 +58,16 @@ gamestate.render = function() {
       //bitfont.render("the quick brown fox jumps over the lazy dog", 8, 20, bitfont.JUSTIFY_LEFT);
       //bitfont.render("SPHINX OF BLACK QUARTZ, JUDGE MY VOW!", 8, 32, bitfont.JUSTIFY_LEFT);
       //bitfont.render("sphinx of black quartz, judge my vow!", 8, 44, bitfont.JUSTIFY_LEFT);
+      
+      conveyor.render();
       items.render();
       scorekeeper.render();
       break;
         
     case gamestate.state_types.GAME_OVER:
 
-      items.render();
+      conveyor.render();
+      items.render();      
       scorekeeper.render();
       
       bitfont.render("Recycled " + scorekeeper.total_recycles + " items!", 200, 96, bitfont.JUSTIFY_CENTER);
