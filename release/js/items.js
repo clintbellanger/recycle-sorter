@@ -19,14 +19,14 @@ items.init = function() {
   items.defs[3]  = {name:"Cardboard Box", x:98,  y:14, w:51, h:48, rtype:items.recycle_types.PAPER};
   items.defs[4]  = {name:"News Print",    x:151, y:34, w:53, h:28, rtype:items.recycle_types.PAPER};
   items.defs[5]  = {name:"Brown Bag",     x:206, y:16, w:35, h:46, rtype:items.recycle_types.PAPER}; 
-  items.defs[6]  = {name:"Soda Bottle",   x:243, y:12, w:17, h:50, rtype:items.recycle_types.GLASS};
+  items.defs[6]  = {name:"Green Bottle",   x:243, y:12, w:17, h:50, rtype:items.recycle_types.GLASS};
   items.defs[7]  = {name:"Mason Jar",     x:262, y:27, w:23, h:35, rtype:items.recycle_types.GLASS};
   items.defs[8]  = {name:"Root Beer",     x:287, y:13, w:16, h:49, rtype:items.recycle_types.GLASS};  
   items.defs[9]  = {name:"Small Can",     x:305, y:32, w:23, h:30, rtype:items.recycle_types.METAL};
   items.defs[10] = {name:"Large Can",     x:329, y:22, w:22, h:40, rtype:items.recycle_types.METAL};
   items.defs[11] = {name:"Soda Can",      x:353, y:28, w:18, h:34, rtype:items.recycle_types.METAL};  
   items.defs[12] = {name:"Foam Cup",      x:373, y:17, w:28, h:45, rtype:items.recycle_types.LANDFILL};
-  items.defs[13] = {name:"Pizza Box",     x:403, y:32, w:60, h:30, rtype:items.recycle_types.LANDFILL};
+  items.defs[13] = {name:"Greasy Box",    x:403, y:32, w:60, h:30, rtype:items.recycle_types.LANDFILL};
   items.defs[14] = {name:"Coffee Mug",    x:465, y:36, w:29, h:26, rtype:items.recycle_types.LANDFILL};
   items.defs[15] = {name:"Spray Can",     x:496, y:22, w:17, h:40, rtype:items.recycle_types.LANDFILL};
 
@@ -379,6 +379,9 @@ items.collect = function() {
 }
 
 items.render = function() {
+
+  items.render_caption();
+
   for (var i = items.ilist.length-1; i >= 0; i--) {
     if (!items.grabbing || items.grabbed_item !== i) {
       items.render_single(i);
@@ -388,6 +391,12 @@ items.render = function() {
   // show the grabbed item in the foreground (draw last)
   if (items.grabbing) {
     items.render_single(items.grabbed_item);
+  }
+}
+
+items.render_caption = function() {
+  if (items.grabbing) {
+    bitfont.render(items.defs[items.ilist[items.grabbed_item].itype].name, 200, 96, bitfont.JUSTIFY_CENTER);
   }
 }
 
