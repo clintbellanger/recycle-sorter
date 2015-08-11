@@ -2,7 +2,7 @@ var title = new Object();
 
 title.init = function() {
   title.img_id = imageset.load("images/title.png");
-  title.area = {x: 105, y: 94, w: 196, h: 34};
+  title.area = {x: 105, y: 108, w: 196, h: 34};
   
   title.button_id = imageset.load("images/interface/button.png");
   title.button_area = {x: 152, y: 146, w: 96, h: 28};
