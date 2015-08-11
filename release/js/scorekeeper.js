@@ -39,7 +39,9 @@ scorekeeper.init = function() {
   scorekeeper.symbol_active[items.recycle_types.LANDFILL] = {stype:scorekeeper.symbol_types.NONE, timer: 0};
   
   scorekeeper.mistakes_to_game_over = 3;
+  scorekeeper.current_high_score = 0;
   scorekeeper.reset();
+  
   
 }
 
@@ -47,7 +49,7 @@ scorekeeper.reset = function() {
   scorekeeper.total_mistakes = 0;
   scorekeeper.total_recycles = 0;  
   scorekeeper.end_game = false;
-  scorekeeper.new_high_score = false;
+  scorekeeper.new_high_score = false;  
   scorekeeper.current_high_score = scorekeeper.load_high_score();
 }
 
@@ -59,6 +61,18 @@ scorekeeper.save_score = function(recycle_count) {
 
   scorekeeper.new_high_score = false;
   
+  // temporary high score storage, if localStorage isn't available
+  if (!window.localStorage) {
+    if (recycle_count > scorekeeper.current_high_score) {
+      if (scorekeeper.current_high_score > 0) {
+        scorekeeper.new_high_score = true;
+      }
+      scorekeeper.current_high_score = recycle_count;      
+    }
+    return;
+  }
+  
+  // permament high score storage
   if (!localStorage.recycle_high_score) {
     localStorage.recycle_high_score = recycle_count;
     scorekeeper.current_high_score = recycle_count;
@@ -72,8 +86,11 @@ scorekeeper.save_score = function(recycle_count) {
 }
 
 scorekeeper.load_high_score = function() {
-  if (localStorage.recycle_high_score) return Number(localStorage.recycle_high_score);
-  else return 0;
+
+  if (!window.localStorage) return scorekeeper.current_high_score;
+
+  if (localStorage.getItem("recycle_high_score") === null) return 0;
+  else return Number(localStorage.recycle_high_score);
 }
 
 scorekeeper.logic = function() {
