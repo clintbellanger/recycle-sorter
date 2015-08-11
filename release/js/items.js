@@ -1,3 +1,11 @@
+/**
+  Rubbish item management
+  Also implements some main game board logic (where items can move).
+  
+  TODO: clean up the logic by moving parts to other modules
+  
+*/
+
 var items = new Object();
 
 items.init = function() {
@@ -30,6 +38,7 @@ items.init = function() {
   items.defs[14] = {name:"Coffee Mug",    x:465, y:36, w:29, h:26, rtype:items.recycle_types.LANDFILL};
   items.defs[15] = {name:"Spray Can",     x:496, y:22, w:17, h:40, rtype:items.recycle_types.LANDFILL};
 
+  // TODO: move bins properties to a bins class
   items.bins = new Array();
   items.bins[items.recycle_types.PLASTIC]  = {name:"Plastic",  hotspot: {x: -32, y: -32, w: 136, h: 112}, center_x: 56 };
   items.bins[items.recycle_types.PAPER]    = {name:"Paper",    hotspot: {x: 104, y: -32, w: 96,  h: 112}, center_x: 152};
@@ -118,6 +127,7 @@ items.logic_game_over = function() {
   items.bounds_check();
 }
 
+// TODO: move to conveyor class
 items.conveyor_speed = function() {
   if (items.conveyor_moving) return -1;
   else return 0;
@@ -125,6 +135,8 @@ items.conveyor_speed = function() {
 
 
 items.move = function() {
+
+  // TODO: move conveyor properties to the conveyor class
   var treadmill_left = 84;
   var treadmill_top = 192;
   
@@ -285,6 +297,7 @@ items.toss = function() {
   var id = items.grabbed_item;
   
   // throw item that was just released?
+  // TODO: move bins properties to a bins class
   var bins_bottom = 80;
   if (items.ilist[id].y > bins_bottom) {
     return; // not high enough to toss
@@ -348,6 +361,7 @@ items.collect = function() {
   
   var item_x;
   var target_bin = -1;
+  // TODO: move bins properties to a bins class
   var bins_top = 16;
   var bins_bottom = 80;  
   
@@ -413,6 +427,7 @@ items.render_single = function(item_id) {
   visible_height = items.defs[itype].h;
 
   // check going into the landfill bin  
+  // TODO: move conveyor properties to the conveyor class
   var treadmill_left = 84;
   if (items.ilist[item_id].x + items.defs[items.ilist[item_id].itype].w < treadmill_left) {
       
@@ -424,6 +439,7 @@ items.render_single = function(item_id) {
   }
   
   // check going into a recycle bin
+  // TODO: move bins properties to a bins class
   var bins_top = 16;
   var bins_bottom = 80;
   
