@@ -38,7 +38,12 @@ items.init = function() {
   items.bins[items.recycle_types.LANDFILL] = {name:"Landfill", hotspot: {x: -32, y: 0,   w: 136, h: 112}, center_x: 40 };
     
   // current items on screen  
-  items.ilist = new Array();  
+  items.ilist = new Array();
+  
+  items.reset();
+}
+
+items.reset = function() {
 
   // info about the item being held  
   items.grabbing = false;
@@ -48,6 +53,7 @@ items.init = function() {
   items.delay_between_items = 96;
   
   items.conveyor_moving = true;
+  
 }
 
 items.add_random = function() {

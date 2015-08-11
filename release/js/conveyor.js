@@ -20,15 +20,21 @@ conveyor.init = function() {
   conveyor.top = 192;
   conveyor.left = 80;  
   conveyor.belts_per_gear = 4;
+  
+  conveyor.active = true;
 
 }
 
 conveyor.logic = function() {
 
-  // animate and loop
-  conveyor.current_frame++;
-  if (conveyor.current_frame == conveyor.animation_frames) {
-    conveyor.current_frame = 0;
+
+  if (conveyor.active) {
+  
+    // animate and loop
+    conveyor.current_frame++;
+    if (conveyor.current_frame == conveyor.animation_frames) {
+      conveyor.current_frame = 0;
+    }
   }
   
 }

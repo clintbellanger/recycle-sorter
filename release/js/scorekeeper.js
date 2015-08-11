@@ -38,15 +38,17 @@ scorekeeper.init = function() {
   scorekeeper.symbol_active[items.recycle_types.METAL]    = {stype:scorekeeper.symbol_types.NONE, timer: 0};
   scorekeeper.symbol_active[items.recycle_types.LANDFILL] = {stype:scorekeeper.symbol_types.NONE, timer: 0};
   
-  scorekeeper.total_mistakes = 0;
   scorekeeper.mistakes_to_game_over = 3;
+  scorekeeper.reset();
   
-  scorekeeper.total_recycles = 0;
-  
+}
+
+scorekeeper.reset = function() {
+  scorekeeper.total_mistakes = 0;
+  scorekeeper.total_recycles = 0;  
   scorekeeper.end_game = false;
   scorekeeper.new_high_score = false;
   scorekeeper.current_high_score = scorekeeper.load_high_score();
-  
 }
 
 /**
@@ -125,6 +127,8 @@ scorekeeper.verify = function(item_type, bin_type) {
   // show incorrect symbol if an item is placed where it does not belong
   if (!correct) {
     scorekeeper.activate_symbol(scorekeeper.symbol_types.INCORRECT, bin_type);
+    
+    imageset.shaking = 10;
     
     if (scorekeeper.total_mistakes < scorekeeper.mistakes_to_game_over) {
       scorekeeper.total_mistakes++;

@@ -13,7 +13,7 @@ gamestate.init = function() {
     GAME_OVER: 2
   };
     
-  gamestate.current_state = gamestate.state_types.PLAY;
+  gamestate.current_state = gamestate.state_types.TITLE;
   
   gamestate.background = imageset.load("images/background.png");
 }
@@ -22,6 +22,17 @@ gamestate.logic = function() {
 
 
   switch(gamestate.current_state) {
+  
+    case gamestate.state_types.TITLE:
+      imageset.logic();
+      title.check_buttons();
+      
+      if (title.start_game) {
+        title.reset();
+        gamestate.current_state = gamestate.state_types.PLAY;
+        conveyor.active = true;
+      }
+      break;
   
     case gamestate.state_types.PLAY:
       imageset.logic();
@@ -32,6 +43,7 @@ gamestate.logic = function() {
       // if this round has ended, move to the game over screen
       if (scorekeeper.end_game) {
         gamestate.current_state = gamestate.state_types.GAME_OVER;
+        conveyor.active = false;
       }
 
       break;
@@ -40,6 +52,17 @@ gamestate.logic = function() {
       imageset.logic();
       items.logic_game_over();
       scorekeeper.logic();
+      title.check_buttons();
+      
+      // Try Again
+      if (title.start_game) {        
+        gamestate.current_state = gamestate.state_types.PLAY;
+        title.reset();
+        items.reset();
+        scorekeeper.reset();
+        conveyor.active = true;      
+      }
+      
       break;
   }
   
@@ -52,6 +75,13 @@ gamestate.render = function() {
 
   switch(gamestate.current_state) {
   
+    case gamestate.state_types.TITLE:
+      title.render();
+      conveyor.render();
+      
+    
+      break;
+      
     case gamestate.state_types.PLAY:    
     
       //bitfont.render("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", 8, 8, bitfont.JUSTIFY_LEFT);
@@ -78,7 +108,13 @@ gamestate.render = function() {
       else {
         bitfont.render("High Score: " + scorekeeper.current_high_score, 200, 112, bitfont.JUSTIFY_CENTER);
       }
-      bitfont.render("Refresh to try again.", 200, 128, bitfont.JUSTIFY_CENTER);
+      
+      // bitfont.render("Refresh to try again.", 200, 128, bitfont.JUSTIFY_CENTER);
+      
+      if (items.ilist.length == 0) {
+        title.render_button("Try Again");
+      }
+      
       break;
       
    }
