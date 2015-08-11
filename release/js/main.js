@@ -48,6 +48,7 @@ game_main.init = function() {
   conveyor.init();
   items.init();
   scorekeeper.init();
+  tutorial.init();
   title.init();
   gamestate.init();
   

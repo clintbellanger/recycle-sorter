@@ -9,8 +9,9 @@ gamestate.init = function() {
 
   gamestate.state_types = {
     TITLE: 0,
-    PLAY: 1,
-    GAME_OVER: 2
+    TUTORIAL: 1,
+    PLAY: 2,
+    GAME_OVER: 3
   };
     
   gamestate.current_state = gamestate.state_types.TITLE;
@@ -28,9 +29,21 @@ gamestate.logic = function() {
       title.check_buttons();
       
       if (title.start_game) {
-        title.reset();
-        gamestate.current_state = gamestate.state_types.PLAY;
-        conveyor.active = true;
+        tutorial.reset();
+        gamestate.current_state = gamestate.state_types.TUTORIAL;
+      }
+      break;
+  
+    case gamestate.state_types.TUTORIAL:
+      imageset.logic();
+      conveyor.logic();   
+      items.logic();      
+      scorekeeper.logic();
+      tutorial.logic();
+      
+      if (tutorial.finished) {
+         gamestate.current_state = gamestate.state_types.TITLE;
+         title.reset();         
       }
       break;
   
@@ -38,6 +51,7 @@ gamestate.logic = function() {
       imageset.logic();
       conveyor.logic();
       items.logic();
+      items.item_flow();
       scorekeeper.logic();
       
       // if this round has ended, move to the game over screen
@@ -77,8 +91,15 @@ gamestate.render = function() {
   
     case gamestate.state_types.TITLE:
       title.render();
-      conveyor.render();
+      conveyor.render();      
+    
+      break;
       
+    case gamestate.state_types.TUTORIAL:
+      conveyor.render();
+      tutorial.render();
+      items.render();
+      scorekeeper.render();      
     
       break;
       

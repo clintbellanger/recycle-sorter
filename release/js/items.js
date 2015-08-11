@@ -67,17 +67,26 @@ items.reset = function() {
 
 items.add_random = function() {
 
-  new_item = new Object();
-  var treadmill_top = 192;
+  var random_item = Math.floor(Math.random() * items.defs.length);
+  items.add_item(random_item);  
   
-  new_item.itype = Math.floor(Math.random() * items.defs.length);
-  new_item.x = game_main.VIEW_WIDTH -1;  
+}
+
+items.add_item = function(item_id) {
+
+  new_item = new Object();
+  
+  new_item.itype = item_id;
+  
+  new_item.x = game_main.VIEW_WIDTH -1;    
+  var treadmill_top = 192;
   new_item.y = treadmill_top - items.defs[new_item.itype].h;
 
   new_item.dx = items.conveyor_speed();  
   new_item.dy = 0;
   
   items.ilist.push(new_item);
+  
 }
 
 
@@ -92,7 +101,17 @@ items.remove = function(item_id) {
 
 items.logic = function() {
 
-  if (items.conveyor_moving) {
+  items.grab_check();
+  items.release_check();
+  items.move();
+  items.bounds_check();
+  items.collect();
+  
+}
+
+items.item_flow = function() {
+
+  if (items.conveyor_moving) {  
   
     // check for adding new items
     items.new_countdown--;
@@ -101,13 +120,7 @@ items.logic = function() {
       items.new_countdown = items.delay_between_items;
     }
   }
-  
-  items.grab_check();
-  items.release_check();
-  items.move();
-  items.bounds_check();
-  items.collect();
-  
+
 }
 
 items.logic_game_over = function() {

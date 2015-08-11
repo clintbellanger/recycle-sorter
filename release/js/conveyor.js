@@ -21,7 +21,7 @@ conveyor.init = function() {
   conveyor.left = 80;  
   conveyor.belts_per_gear = 4;
   
-  conveyor.active = true;
+  conveyor.active = false;
 
 }
 
