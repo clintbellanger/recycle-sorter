@@ -35,7 +35,7 @@ tutorial.load_tutorial = function() {
     ["Welcome to Recycle Sorter!", "Your goal is to put recyclable items in the", "right bin before they reach the landfill."],
     ["Metals such as steel and aluminum", "are found in food and drink cans", "that are easily recycled."],
     ["Spray cans are made of metal,", "but must go to the Landfill", "because they are pressurized."],
-    ["Glass items that are clear", "or green or brown can be", "recycled here."],
+    ["Glass items that are green", "or clear or brown can be", "recycled here."],
     ["Ceramic is very strong against heat.", "But that makes it hard to recycle.", "Broken ceramics can go to the Landfill."],
     ["Papers such as cardboard boxes,", "newspapers, and brown bags can", "all go into this Paper recycing bin."],
     ["Boxes that are too greasy, such as", "pizza boxes, cannot be recycled.", "Send it to the Landfill."],
@@ -50,9 +50,9 @@ tutorial.load_tutorial = function() {
     {trigger_time:  6, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},
     
     {trigger_time: 10, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  1},
-    {trigger_time: 12, event_type: tutorial.event_types.ADD_ITEM,       option_id:  9},
-    {trigger_time: 13, event_type: tutorial.event_types.ADD_ITEM,       option_id: 10},
-    {trigger_time: 14, event_type: tutorial.event_types.ADD_ITEM,       option_id: 11},
+    {trigger_time: 12, event_type: tutorial.event_types.ADD_ITEM,       option_id: 10},
+    {trigger_time: 13, event_type: tutorial.event_types.ADD_ITEM,       option_id: 11},
+    {trigger_time: 14, event_type: tutorial.event_types.ADD_ITEM,       option_id:  9},
     
     {trigger_time: 20, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  2},
     {trigger_time: 22, event_type: tutorial.event_types.ADD_ITEM,       option_id: 15},

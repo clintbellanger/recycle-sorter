@@ -47,7 +47,9 @@ gamestate.logic = function() {
       
       if (tutorial.finished) {
          gamestate.current_state = gamestate.state_types.TITLE;
-         title.reset();         
+         title.reset();
+         items.reset();
+         scorekeeper.reset();
       }
       break;
   
