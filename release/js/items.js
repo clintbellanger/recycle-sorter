@@ -429,7 +429,7 @@ items.render = function() {
 
 items.render_caption = function() {
   if (items.grabbing) {
-    bitfont.render(items.defs[items.ilist[items.grabbed_item].itype].name, 200, 96, bitfont.JUSTIFY_CENTER);
+    bitfont.render(items.defs[items.ilist[items.grabbed_item].itype].name, 200, 88, bitfont.JUSTIFY_CENTER);
   }
 }
 

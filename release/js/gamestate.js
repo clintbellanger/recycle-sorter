@@ -28,9 +28,13 @@ gamestate.logic = function() {
       imageset.logic();
       title.check_buttons();
       
-      if (title.start_game) {
+      if (title.start_tutorial) {
         tutorial.reset();
         gamestate.current_state = gamestate.state_types.TUTORIAL;
+      }
+      else if (title.start_play) {
+        conveyor.active = true;
+        gamestate.current_state = gamestate.state_types.PLAY;
       }
       break;
   
@@ -58,6 +62,7 @@ gamestate.logic = function() {
       if (scorekeeper.end_game) {
         gamestate.current_state = gamestate.state_types.GAME_OVER;
         conveyor.active = false;
+        title.reset();
       }
 
       break;
@@ -69,12 +74,12 @@ gamestate.logic = function() {
       title.check_buttons();
       
       // Try Again
-      if (title.start_game) {        
+      if (title.start_play) {        
         gamestate.current_state = gamestate.state_types.PLAY;
         title.reset();
         items.reset();
         scorekeeper.reset();
-        conveyor.active = true;      
+        conveyor.active = true;
       }
       
       break;
@@ -133,7 +138,7 @@ gamestate.render = function() {
       // bitfont.render("Refresh to try again.", 200, 128, bitfont.JUSTIFY_CENTER);
       
       if (items.ilist.length == 0) {
-        title.render_button("Try Again");
+        title.render_button("Try Again", title.play_button_area);
       }
       
       break;

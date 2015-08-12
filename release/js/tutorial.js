@@ -33,7 +33,7 @@ tutorial.load_tutorial = function() {
 
   tutorial.messages = [
     ["Welcome to Recycle Sorter!", "Your goal is to put recyclable items in the", "right bin before they reach the landfill."],
-    ["Metals such as steel and aluminum", "are found in metal cans", "that are easy to recycle"],
+    ["Metals such as steel and aluminum", "are found in food and drink cans", "that are easily recycled."],
     ["Spray cans are made of metal,", "but must go to the Landfill", "because they are pressurized."],
     ["Glass items that are clear", "or green or brown can be", "recycled here."],
     ["Ceramic is very strong against heat.", "But that makes it hard to recycle.", "Broken ceramics can go to the Landfill."],
@@ -47,7 +47,7 @@ tutorial.load_tutorial = function() {
   // queue up the schedule of events
   tutorial.elist = [
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  0},
-    {trigger_time:  8, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},
+    {trigger_time:  6, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},
     
     {trigger_time: 10, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  1},
     {trigger_time: 12, event_type: tutorial.event_types.ADD_ITEM,       option_id:  9},
