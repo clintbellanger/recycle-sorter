@@ -19,82 +19,73 @@ tutorial.init = function() {
 }
 
 tutorial.reset = function() {
-  tutorial.elist = [];
+
   tutorial.frame_timer = 0;
   tutorial.seconds_elapsed = 0;
   tutorial.finished = false;
   tutorial.current_message_id = 0;
+  tutorial.event_cursor = 0;
+  
   tutorial.load_tutorial();
 }
 
 tutorial.load_tutorial = function() {
 
   tutorial.messages = [
-    ["Welcome to the Recycle Sorter!", "Your goal is to put recyclable items in the", "right bin before they reach the landfill."],
-    ["Metals", "", ""],
-    ["Spray Cans", "", ""],
-    ["Glasses", "", ""],
-    ["Ceramics", "", ""],
-    ["Papers", "", ""],
-    ["Greasy Boxes", "", ""],
-    ["Plastics", "", ""],
-    ["Polystyrene", "", ""],
-    ["Check your local recycling rules!", "", ""]
+    ["Welcome to Recycle Sorter!", "Your goal is to put recyclable items in the", "right bin before they reach the landfill."],
+    ["Metals such as steel and aluminum", "are found in metal cans", "that are easy to recycle"],
+    ["Spray cans are made of metal,", "but must go to the Landfill", "because they are pressurized."],
+    ["Glass items that are clear", "or green or brown can be", "recycled here."],
+    ["Ceramic is very strong against heat.", "But that makes it hard to recycle.", "Broken ceramics can go to the Landfill."],
+    ["Papers such as cardboard boxes,", "newspapers, and brown bags can", "all go into this Paper recycing bin."],
+    ["Boxes that are too greasy, such as", "pizza boxes, cannot be recycled.", "Send it to the Landfill."],
+    ["Plastics numbers 1 and 2 are recycled here", "and most places. Many drink and", "household containers can be recycled."],
+    ["Foam (Polystyrene) is sometimes marked", "as \"plastic #6\" but it cannot be", "recycled here. It goes in the Landfill."],
+    ["Remember to check your local recycling rules!", "You are now ready", "to be a Recycle Sorter!"]
   ];
 
   // queue up the schedule of events
-  
-  tutorial.queue_event(0, tutorial.event_types.SHOW_MESSAGE, 0); // welcome
-  
-  tutorial.queue_event(8, tutorial.event_types.CONVEYOR_STATE, true); // start conveyor
-  
-  tutorial.queue_event(10, tutorial.event_types.SHOW_MESSAGE, 1); // metals1
-  tutorial.queue_event(12, tutorial.event_types.ADD_ITEM, 9);    
-  tutorial.queue_event(13, tutorial.event_types.ADD_ITEM, 10);    
-  tutorial.queue_event(14, tutorial.event_types.ADD_ITEM, 11);    
-  
-  tutorial.queue_event(20, tutorial.event_types.SHOW_MESSAGE, 2); // spray cans
-  tutorial.queue_event(22, tutorial.event_types.ADD_ITEM, 15);
-
-  tutorial.queue_event(28, tutorial.event_types.SHOW_MESSAGE, 3); // glass
-  tutorial.queue_event(30, tutorial.event_types.ADD_ITEM, 6);
-  tutorial.queue_event(31, tutorial.event_types.ADD_ITEM, 7);
-  tutorial.queue_event(32, tutorial.event_types.ADD_ITEM, 8);
-
-  tutorial.queue_event(38, tutorial.event_types.SHOW_MESSAGE, 4); // ceramic
-  tutorial.queue_event(40, tutorial.event_types.ADD_ITEM, 14);  
-  
-  tutorial.queue_event(46, tutorial.event_types.SHOW_MESSAGE, 5); // paper
-  tutorial.queue_event(48, tutorial.event_types.ADD_ITEM, 3);
-  tutorial.queue_event(49, tutorial.event_types.ADD_ITEM, 4);
-  tutorial.queue_event(50, tutorial.event_types.ADD_ITEM, 5);
-  
-  tutorial.queue_event(56, tutorial.event_types.SHOW_MESSAGE, 6); // greasy box
-  tutorial.queue_event(58, tutorial.event_types.ADD_ITEM, 13);  
-
-  tutorial.queue_event(64, tutorial.event_types.SHOW_MESSAGE, 7); // plastics
-  tutorial.queue_event(66, tutorial.event_types.ADD_ITEM, 0);
-  tutorial.queue_event(67, tutorial.event_types.ADD_ITEM, 1);
-  tutorial.queue_event(68, tutorial.event_types.ADD_ITEM, 2);
-
-  tutorial.queue_event(74, tutorial.event_types.SHOW_MESSAGE, 8); // foam cup
-  tutorial.queue_event(76, tutorial.event_types.ADD_ITEM, 12);  
+  tutorial.elist = [
+    {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  0},
+    {trigger_time:  8, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},
     
-  tutorial.queue_event(82, tutorial.event_types.SHOW_MESSAGE, 9); // outro  
-  tutorial.queue_event(84, tutorial.event_types.CONVEYOR_STATE, false); // stop conveying
-  tutorial.queue_event(90, tutorial.event_types.FINISHED, 0); // end of tutorial
-  
-}
-
-
-tutorial.queue_event = function(trigger_time, event_type, option_id) {
-  var new_event = new Object();
-  
-  new_event.trigger_time = trigger_time;
-  new_event.event_type = event_type;
-  new_event.option_id = option_id;
-  
-  tutorial.elist.push(new_event);
+    {trigger_time: 10, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  1},
+    {trigger_time: 12, event_type: tutorial.event_types.ADD_ITEM,       option_id:  9},
+    {trigger_time: 13, event_type: tutorial.event_types.ADD_ITEM,       option_id: 10},
+    {trigger_time: 14, event_type: tutorial.event_types.ADD_ITEM,       option_id: 11},
+    
+    {trigger_time: 20, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  2},
+    {trigger_time: 22, event_type: tutorial.event_types.ADD_ITEM,       option_id: 15},
+    
+    {trigger_time: 28, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  3},
+    {trigger_time: 30, event_type: tutorial.event_types.ADD_ITEM,       option_id:  6},
+    {trigger_time: 31, event_type: tutorial.event_types.ADD_ITEM,       option_id:  7},
+    {trigger_time: 32, event_type: tutorial.event_types.ADD_ITEM,       option_id:  8},  
+    
+    {trigger_time: 38, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  4},
+    {trigger_time: 40, event_type: tutorial.event_types.ADD_ITEM,       option_id: 14},
+    
+    {trigger_time: 46, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  5},
+    {trigger_time: 48, event_type: tutorial.event_types.ADD_ITEM,       option_id:  3},
+    {trigger_time: 49, event_type: tutorial.event_types.ADD_ITEM,       option_id:  4},
+    {trigger_time: 50, event_type: tutorial.event_types.ADD_ITEM,       option_id:  5},  
+    
+    {trigger_time: 56, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  6},
+    {trigger_time: 58, event_type: tutorial.event_types.ADD_ITEM,       option_id: 13},
+    
+    {trigger_time: 64, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  7},
+    {trigger_time: 66, event_type: tutorial.event_types.ADD_ITEM,       option_id:  0},
+    {trigger_time: 67, event_type: tutorial.event_types.ADD_ITEM,       option_id:  1},
+    {trigger_time: 68, event_type: tutorial.event_types.ADD_ITEM,       option_id:  2},  
+    
+    {trigger_time: 74, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  8},
+    {trigger_time: 76, event_type: tutorial.event_types.ADD_ITEM,       option_id: 12},
+    
+    {trigger_time: 82, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  9},
+    {trigger_time: 84, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
+    {trigger_time: 90, event_type: tutorial.event_types.FINISHED,       option_id:  0}
+  ];
+    
 }
 
 tutorial.logic = function() {
@@ -103,13 +94,19 @@ tutorial.logic = function() {
   tutorial.seconds_elapsed = Math.floor(tutorial.frame_timer / 60);
   
   var next_trigger = 0;
-  if (tutorial.elist.length > 0) next_trigger = tutorial.elist[0].trigger_time;
   
-  while (tutorial.seconds_elapsed >= next_trigger && tutorial.elist.length > 0) {
-      tutorial.play_event(tutorial.elist[0]);
-      tutorial.elist.shift();
-      
-      if (tutorial.elist.length > 0) next_trigger = tutorial.elist[0].trigger_time;      
+  if (tutorial.event_cursor < tutorial.elist.length) {
+    next_trigger = tutorial.elist[tutorial.event_cursor].trigger_time;
+  }
+  
+  while (tutorial.seconds_elapsed >= next_trigger) {
+    tutorial.play_event(tutorial.elist[tutorial.event_cursor]);    
+    tutorial.event_cursor++;
+    
+    if (tutorial.event_cursor < tutorial.elist.length) {      
+      next_trigger = tutorial.elist[tutorial.event_cursor].trigger_time;
+    }
+    else break;
   }
   
 }
