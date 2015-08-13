@@ -40,11 +40,11 @@ items.init = function() {
 
   // TODO: move bins properties to a bins class
   items.bins = new Array();
-  items.bins[items.recycle_types.PLASTIC]  = {name:"Plastic",  hotspot: {x: -32, y: -32, w: 136, h: 112}, center_x: 56 };
-  items.bins[items.recycle_types.PAPER]    = {name:"Paper",    hotspot: {x: 104, y: -32, w: 96,  h: 112}, center_x: 152};
-  items.bins[items.recycle_types.GLASS]    = {name:"Glass",    hotspot: {x: 200, y: -32, w: 96,  h: 112}, center_x: 248};
-  items.bins[items.recycle_types.METAL]    = {name:"Metal",    hotspot: {x: 296, y: -32, w: 136, h: 112}, center_x: 344};
-  items.bins[items.recycle_types.LANDFILL] = {name:"Landfill", hotspot: {x: -32, y: 0,   w: 136, h: 112}, center_x: 40 };
+  items.bins[items.recycle_types.PLASTIC]  = {name:"Plastic",  hotspot: {x: -32, y: -32, w: 136, h: 112}, center_x: 56,  left_x:  16};
+  items.bins[items.recycle_types.PAPER]    = {name:"Paper",    hotspot: {x: 104, y: -32, w: 96,  h: 112}, center_x: 152, left_x: 112};
+  items.bins[items.recycle_types.GLASS]    = {name:"Glass",    hotspot: {x: 200, y: -32, w: 96,  h: 112}, center_x: 248, left_x: 208};
+  items.bins[items.recycle_types.METAL]    = {name:"Metal",    hotspot: {x: 296, y: -32, w: 136, h: 112}, center_x: 344, left_x: 304};
+  items.bins[items.recycle_types.LANDFILL] = {name:"Landfill", hotspot: {x: -32, y: 0,   w: 136, h: 112}, center_x: 40,  left_x:   0};
       
   items.reset();
 }

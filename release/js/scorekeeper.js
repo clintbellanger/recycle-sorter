@@ -10,14 +10,16 @@ scorekeeper.init = function() {
 
   scorekeeper.symbol_types = {
     NONE: -1,
-    RECYCLE: 0,
-    INCORRECT: 1
+    RECYCLE: 0,    
+    INCORRECT: 1,
+    RAINBOW: 2
   };
   
   // icon locations on the image atlas
   scorekeeper.symbol_src = new Array();
   scorekeeper.symbol_src[scorekeeper.symbol_types.RECYCLE]   = {x:  2, y: 2, w: 32, h: 33};
   scorekeeper.symbol_src[scorekeeper.symbol_types.INCORRECT] = {x: 36, y: 2, w: 30, h: 31};
+  scorekeeper.symbol_src[scorekeeper.symbol_types.RAINBOW]   = {x: 68, y: 2, w: 80, h: 16};
 
   // how long to display a score symbol before it is hidden again
   scorekeeper.symbol_duration = 30;
@@ -183,6 +185,10 @@ scorekeeper.render_symbol = function(symbol_type, bin_type) {
      scorekeeper.symbol_dest[bin_type].mid_x - scorekeeper.symbol_src[symbol_type].w/2,
      scorekeeper.symbol_dest[bin_type].mid_y - scorekeeper.symbol_src[symbol_type].h/2
   );
+  
+  if (symbol_type === scorekeeper.symbol_types.RECYCLE) {
+    scorekeeper.render_rainbow(bin_type);
+  }
 }
 
 scorekeeper.render_mistakes = function() {
@@ -198,5 +204,18 @@ scorekeeper.render_mistakes = function() {
       208
     );
   }
-
 }
+
+scorekeeper.render_rainbow = function(bin_type) {
+  imageset.render(
+    scorekeeper.atlas,
+     scorekeeper.symbol_src[scorekeeper.symbol_types.RAINBOW].x,
+     scorekeeper.symbol_src[scorekeeper.symbol_types.RAINBOW].y,
+     scorekeeper.symbol_src[scorekeeper.symbol_types.RAINBOW].w,
+     scorekeeper.symbol_src[scorekeeper.symbol_types.RAINBOW].h,
+     items.bins[bin_type].left_x,
+     0
+  );
+}
+
+
