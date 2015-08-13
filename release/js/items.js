@@ -211,6 +211,13 @@ items.move = function() {
         }
       }
       
+      // random bounce
+      if (on_treadmill) {
+        if (Math.random() < 0.01) {
+          items.ilist[i].dy = -1 * Math.floor(Math.random() * 3);
+        }
+      }
+      
       // move at current speed
       items.ilist[i].x += items.ilist[i].dx;
       items.ilist[i].y += items.ilist[i].dy;
