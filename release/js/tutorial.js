@@ -32,16 +32,16 @@ tutorial.reset = function() {
 tutorial.load_tutorial = function() {
 
   tutorial.messages = [
-    ["Welcome to Recycle Sorter!", "Your goal is to put recyclable items in the", "right bin before they reach the landfill."],
-    ["Metals such as steel and aluminum", "are found in food and drink cans", "that are easily recycled."],
-    ["Spray cans are made of metal,", "but must go to the Landfill", "because they are pressurized."],
-    ["Glass items that are green", "or clear or brown can be", "recycled here."],
-    ["Ceramic is very strong against heat.", "But that makes it hard to recycle.", "Broken ceramics can go to the Landfill."],
-    ["Papers such as cardboard boxes,", "newspapers, and brown bags can", "all go into this Paper recycing bin."],
-    ["Boxes that are too greasy, such as", "pizza boxes, cannot be recycled.", "Send it to the Landfill."],
-    ["Plastics numbers 1 and 2 are recycled here", "and most places. Many drink and", "household containers can be recycled."],
-    ["Foam (Polystyrene) is sometimes marked", "as \"plastic #6\" but it cannot be", "recycled here. It goes in the Landfill."],
-    ["Remember to check your local recycling rules!", "You are now ready", "to be a Recycle Sorter!"]
+    ["Welcome to Recycle Sorter!", "Your goal is to put recyclable items in the", "correct bin before they reach the landfill."],
+    ["Metals such as steel and aluminum", "are found in food and drink cans.", "These are easily recycled."],
+    ["Spray cans are made of metal,", "but must go to the landfill", "because they are pressurized."],
+    ["Glass items that are green,", "clear, or brown can be", "recycled here."],
+    ["Ceramics can handle a lot of heat.", "But that makes them hard to recycle.", "Broken ceramics must go to the landfill."],
+    ["Papers such as cardboard boxes,", "newspapers, and brown bags can", "all go into this paper recycling bin."],
+    ["Boxes that are too greasy, such as", "pizza boxes, cannot be recycled.", "Send them to the landfill."],
+    ["Plastics numbers 1 and 2 are recycled here.", "Many plastic drink and household", "containers can be recycled."],
+    ["Foam (polystyrene) is sometimes marked", "as plastic #6 but it cannot be", "recycled here. It goes in the landfill."],
+    ["You are now ready", "to be a Recycle Sorter!", ""]
   ];
 
   // queue up the schedule of events
@@ -82,8 +82,8 @@ tutorial.load_tutorial = function() {
     {trigger_time: 76, event_type: tutorial.event_types.ADD_ITEM,       option_id: 12},
     
     {trigger_time: 82, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  9},
-    {trigger_time: 84, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
-    {trigger_time: 90, event_type: tutorial.event_types.FINISHED,       option_id:  0}
+    {trigger_time: 87, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
+    {trigger_time: 88, event_type: tutorial.event_types.FINISHED,       option_id:  0}
   ];
     
 }
