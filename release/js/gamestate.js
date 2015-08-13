@@ -17,10 +17,17 @@ gamestate.init = function() {
   gamestate.current_state = gamestate.state_types.TITLE;
   
   gamestate.background = imageset.load("images/background.png");
+  
+  gamestate.impact_pause = 0;
+  
 }
  
 gamestate.logic = function() {
 
+  if (gamestate.impact_pause > 0) {
+    gamestate.impact_pause--;
+    return;
+  }
 
   switch(gamestate.current_state) {
   

@@ -141,6 +141,9 @@ scorekeeper.verify = function(item_type, bin_type) {
       items.delay_between_items -= 1;
     }
     
+    // impact pause!
+    gamestate.impact_pause = 2;
+    
   }
   
   // show incorrect symbol if an item is placed where it does not belong
