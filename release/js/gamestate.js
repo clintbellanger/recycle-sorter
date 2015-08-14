@@ -14,16 +14,15 @@ gamestate.init = function() {
     GAME_OVER: 3
   };
     
-  gamestate.current_state = gamestate.state_types.TITLE;
-  
-  gamestate.background = imageset.load("images/background.png");
-  
+  gamestate.current_state = gamestate.state_types.TITLE;  
+  gamestate.background = imageset.load("images/background.png");  
   gamestate.impact_pause = 0;
   
 }
  
 gamestate.logic = function() {
 
+  // no movement for a few frames to add weight to actions
   if (gamestate.impact_pause > 0) {
     gamestate.impact_pause--;
     return;
@@ -51,6 +50,7 @@ gamestate.logic = function() {
       items.logic();      
       scorekeeper.logic();
       tutorial.logic();
+      particles.logic();
       
       if (tutorial.finished) {
          gamestate.current_state = gamestate.state_types.TITLE;
@@ -66,6 +66,7 @@ gamestate.logic = function() {
       items.logic();
       items.item_flow();
       scorekeeper.logic();
+      particles.logic();
       
       // if this round has ended, move to the game over screen
       if (scorekeeper.end_game) {
@@ -81,6 +82,7 @@ gamestate.logic = function() {
       items.logic_game_over();
       scorekeeper.logic();
       title.check_buttons();
+      particles.logic();
       
       // Try Again
       if (title.start_play) {        
@@ -113,7 +115,8 @@ gamestate.render = function() {
       conveyor.render();
       tutorial.render();
       items.render();
-      scorekeeper.render();      
+      scorekeeper.render();
+      particles.render();
     
       break;
       
@@ -127,6 +130,7 @@ gamestate.render = function() {
       conveyor.render();
       items.render();
       scorekeeper.render();
+      particles.render();
       break;
         
     case gamestate.state_types.GAME_OVER:
@@ -134,6 +138,7 @@ gamestate.render = function() {
       conveyor.render();
       items.render();      
       scorekeeper.render();
+      particles.render();
       
       bitfont.render("Recycled " + scorekeeper.total_recycles + " items!", 200, 96, bitfont.JUSTIFY_CENTER);
       

@@ -131,6 +131,11 @@ scorekeeper.verify = function(item_type, bin_type) {
     
     // points up!
     scorekeeper.total_recycles++;
+
+    // impact pause!
+    // no animations for a few frames to add oomph
+    gamestate.impact_pause = 2;
+
     
     // speed up the item flow (and difficulty)
     // TODO: move this to conveyor object?
@@ -141,8 +146,12 @@ scorekeeper.verify = function(item_type, bin_type) {
       items.delay_between_items -= 1;
     }
     
-    // impact pause!
-    gamestate.impact_pause = 2;
+    // add particles
+    for (var p=0; p < scorekeeper.total_recycles; p++) {
+      var rand_x = Math.floor(Math.random() * items.bin_width) + items.bins[bin_type].left_x;
+      particles.add(rand_x, items.bins_top);
+    }
+    
     
   }
   

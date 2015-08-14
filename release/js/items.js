@@ -45,6 +45,8 @@ items.init = function() {
   items.bins[items.recycle_types.GLASS]    = {name:"Glass",    hotspot: {x: 200, y: -32, w: 96,  h: 112}, center_x: 248, left_x: 208};
   items.bins[items.recycle_types.METAL]    = {name:"Metal",    hotspot: {x: 296, y: -32, w: 136, h: 112}, center_x: 344, left_x: 304};
   items.bins[items.recycle_types.LANDFILL] = {name:"Landfill", hotspot: {x: -32, y: 0,   w: 136, h: 112}, center_x: 40,  left_x:   0};
+  items.bin_width = 80;
+  items.bins_top = 16;
       
   items.reset();
 }

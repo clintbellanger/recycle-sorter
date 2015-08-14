@@ -45,6 +45,7 @@ game_main.init = function() {
   inputs.init();
   imageset.init();
   bitfont.init();
+  particles.init();
   conveyor.init();
   items.init();
   scorekeeper.init();
