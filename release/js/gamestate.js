@@ -130,6 +130,7 @@ gamestate.render = function() {
       conveyor.render();
       items.render();
       scorekeeper.render();
+      scorekeeper.render_current_score();
       particles.render();
       break;
         

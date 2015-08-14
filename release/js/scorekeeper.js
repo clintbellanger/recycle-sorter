@@ -230,4 +230,6 @@ scorekeeper.render_rainbow = function(bin_type) {
   );
 }
 
-
+scorekeeper.render_current_score = function() {
+  bitfont.render(scorekeeper.total_recycles.toString(), 100, 212, bitfont.JUSTIFY_LEFT);
+}
