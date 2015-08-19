@@ -11,9 +11,13 @@ tutorial.init = function() {
     SHOW_MESSAGE: 0,
     ADD_ITEM: 1,
     FINISHED: 2,
-    CONVEYOR_STATE: 3
+    CONVEYOR_STATE: 3,
+    NEXT_BUTTON: 4
   };
-
+  
+  tutorial.next_button = imageset.load("images/interface/arrow_button.png");
+  tutorial.button_area = {x: 328, y: 88, w: 64, h: 42};
+  
   tutorial.reset();
   tutorial.load_tutorial();
 }
@@ -25,6 +29,7 @@ tutorial.reset = function() {
   tutorial.finished = false;
   tutorial.current_message_id = 0;
   tutorial.event_cursor = 0;
+  tutorial.waiting_for_button = false;
   
   tutorial.load_tutorial();
 }
@@ -39,7 +44,7 @@ tutorial.load_tutorial = function() {
     ["Ceramics can handle a lot of heat.", "But that makes them hard to recycle.", "Broken ceramics must go to the landfill."],
     ["Papers such as cardboard boxes,", "newspapers, and brown bags can", "all go into this paper recycling bin."],
     ["Boxes that are too greasy, such as", "pizza boxes, cannot be recycled.", "Send them to the landfill."],
-    ["Plastics numbers 1 and 2 are recycled here.", "Many plastic drink and household", "containers can be recycled."],
+    ["Plastics #1 and #2 are recycled here.", "Many plastic drink and household", "containers can be recycled."],
     ["Foam (polystyrene) is sometimes marked", "as plastic #6 but it cannot be", "recycled here. It goes in the landfill."],
     ["You are now ready", "to be a Recycle Sorter!", ""]
   ];
@@ -47,48 +52,80 @@ tutorial.load_tutorial = function() {
   // queue up the schedule of events
   tutorial.elist = [
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  0},
-    {trigger_time:  6, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},
+    {trigger_time:  2, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
-    {trigger_time: 10, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  1},
-    {trigger_time: 12, event_type: tutorial.event_types.ADD_ITEM,       option_id: 10},
-    {trigger_time: 13, event_type: tutorial.event_types.ADD_ITEM,       option_id: 11},
-    {trigger_time: 14, event_type: tutorial.event_types.ADD_ITEM,       option_id:  9},
+    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},    
+    {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  1},
+    {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id: 10},
+    {trigger_time:  3, event_type: tutorial.event_types.ADD_ITEM,       option_id: 11},
+    {trigger_time:  4, event_type: tutorial.event_types.ADD_ITEM,       option_id:  9},
+    {trigger_time:  6, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
+    {trigger_time:  6, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
-    {trigger_time: 20, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  2},
-    {trigger_time: 22, event_type: tutorial.event_types.ADD_ITEM,       option_id: 15},
+    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},    
+    {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  2},
+    {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id: 15},
+    {trigger_time:  5, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
+    {trigger_time:  5, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
-    {trigger_time: 28, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  3},
-    {trigger_time: 30, event_type: tutorial.event_types.ADD_ITEM,       option_id:  6},
-    {trigger_time: 31, event_type: tutorial.event_types.ADD_ITEM,       option_id:  7},
-    {trigger_time: 32, event_type: tutorial.event_types.ADD_ITEM,       option_id:  8},  
+    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},    
+    {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  3},
+    {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id:  6},
+    {trigger_time:  3, event_type: tutorial.event_types.ADD_ITEM,       option_id:  7},
+    {trigger_time:  4, event_type: tutorial.event_types.ADD_ITEM,       option_id:  8},  
+    {trigger_time:  6, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
+    {trigger_time:  6, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
-    {trigger_time: 38, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  4},
-    {trigger_time: 40, event_type: tutorial.event_types.ADD_ITEM,       option_id: 14},
+    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},    
+    {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  4},
+    {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id: 14},
+    {trigger_time:  5, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
+    {trigger_time:  5, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
-    {trigger_time: 46, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  5},
-    {trigger_time: 48, event_type: tutorial.event_types.ADD_ITEM,       option_id:  3},
-    {trigger_time: 49, event_type: tutorial.event_types.ADD_ITEM,       option_id:  4},
-    {trigger_time: 50, event_type: tutorial.event_types.ADD_ITEM,       option_id:  5},  
+    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},    
+    {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  5},
+    {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id:  3},
+    {trigger_time:  3, event_type: tutorial.event_types.ADD_ITEM,       option_id:  4},
+    {trigger_time:  4, event_type: tutorial.event_types.ADD_ITEM,       option_id:  5},  
+    {trigger_time:  6, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
+    {trigger_time:  6, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
-    {trigger_time: 56, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  6},
-    {trigger_time: 58, event_type: tutorial.event_types.ADD_ITEM,       option_id: 13},
+    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},    
+    {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  6},
+    {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id: 13},
+    {trigger_time:  5, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
+    {trigger_time:  5, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
+
+    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},        
+    {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  7},
+    {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id:  0},
+    {trigger_time:  3, event_type: tutorial.event_types.ADD_ITEM,       option_id:  1},
+    {trigger_time:  4, event_type: tutorial.event_types.ADD_ITEM,       option_id:  2},  
+    {trigger_time:  6, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
+    {trigger_time:  6, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
-    {trigger_time: 64, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  7},
-    {trigger_time: 66, event_type: tutorial.event_types.ADD_ITEM,       option_id:  0},
-    {trigger_time: 67, event_type: tutorial.event_types.ADD_ITEM,       option_id:  1},
-    {trigger_time: 68, event_type: tutorial.event_types.ADD_ITEM,       option_id:  2},  
+    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},    
+    {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  8},
+    {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id: 12},
+    {trigger_time:  5, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
+    {trigger_time:  5, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
-    {trigger_time: 74, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  8},
-    {trigger_time: 76, event_type: tutorial.event_types.ADD_ITEM,       option_id: 12},
-    
-    {trigger_time: 82, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  9},
-    {trigger_time: 87, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
-    {trigger_time: 88, event_type: tutorial.event_types.FINISHED,       option_id:  0}
+    {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  9},
+    {trigger_time:  2, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
+    {trigger_time:  0, event_type: tutorial.event_types.FINISHED,       option_id:  0}
   ];
     
 }
 
 tutorial.logic = function() {
+
+  // halt other logic if waiting for a new button press
+  if (tutorial.waiting_for_button) {
+    if (items.ilist.length == 0 && tutorial.pressing_button()) {
+      tutorial.waiting_for_button = false;
+    }
+    else return;
+  }
 
   tutorial.frame_timer++;
   tutorial.seconds_elapsed = Math.floor(tutorial.frame_timer / 60);
@@ -99,7 +136,7 @@ tutorial.logic = function() {
     next_trigger = tutorial.elist[tutorial.event_cursor].trigger_time;
   }
   
-  while (tutorial.seconds_elapsed >= next_trigger) {
+  while (tutorial.seconds_elapsed >= next_trigger && !tutorial.waiting_for_button) {
     tutorial.play_event(tutorial.elist[tutorial.event_cursor]);    
     tutorial.event_cursor++;
     
@@ -111,11 +148,22 @@ tutorial.logic = function() {
   
 }
 
+tutorial.pressing_button = function() {
+  if (!inputs.pressing.mouse) return false;  
+  return (utils.is_within(inputs.mouse_pos, tutorial.button_area));
+}
+
 tutorial.render = function() {
   // show message
   bitfont.render(tutorial.messages[tutorial.current_message_id][0], 200, 112, bitfont.JUSTIFY_CENTER);
   bitfont.render(tutorial.messages[tutorial.current_message_id][1], 200, 128, bitfont.JUSTIFY_CENTER);
   bitfont.render(tutorial.messages[tutorial.current_message_id][2], 200, 144, bitfont.JUSTIFY_CENTER);
+  
+  if (tutorial.waiting_for_button) {
+    if (items.ilist.length == 0) {
+      tutorial.render_button("Next");
+    }
+  }
 }
 
 tutorial.play_event = function(event_data) {
@@ -135,7 +183,38 @@ tutorial.play_event = function(event_data) {
   
     case tutorial.event_types.CONVEYOR_STATE:
       conveyor.active = event_data.option_id;
+      if (event_data.option_id == false) {
+        // update item speed if conveyor has stopped
+        items.halt_conveyor();
+      }
+      break;
+      
+    case tutorial.event_types.NEXT_BUTTON:
+      tutorial.waiting_for_button = true;
+      
+      // introduced an indefinite pause, so reset the timer to zero
+      tutorial.frame_timer = 0;
       break;
   }
 }
+
+tutorial.render_button = function(button_label) {
+  imageset.render(
+    tutorial.next_button,
+    0,
+    0,
+    tutorial.button_area.w,
+    tutorial.button_area.h,
+    tutorial.button_area.x,
+    tutorial.button_area.y
+  );
+  
+  bitfont.render(
+    button_label,
+    tutorial.button_area.x + 10,
+    tutorial.button_area.y + 14,
+    bitfont.JUSTIFY_LEFT
+  );
+}
+
 

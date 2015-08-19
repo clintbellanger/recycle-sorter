@@ -62,8 +62,6 @@ items.reset = function() {
   items.new_countdown = 0;
   items.delay_between_items = 96;
   
-  items.conveyor_moving = true;
-  
 }
 
 items.add_random = function() {
@@ -83,7 +81,7 @@ items.add_item = function(item_id) {
   var treadmill_top = 192;
   new_item.y = treadmill_top - items.defs[new_item.itype].h;
 
-  new_item.dx = items.conveyor_speed();  
+  new_item.dx = conveyor.get_speed();  
   new_item.dy = 0;
   
   items.ilist.push(new_item);
@@ -112,7 +110,7 @@ items.logic = function() {
 
 items.item_flow = function() {
 
-  if (items.conveyor_moving) {  
+  if (conveyor.active) {
   
     // check for adding new items
     items.new_countdown--;
@@ -122,6 +120,35 @@ items.item_flow = function() {
     }
   }
 
+}
+
+items.halt_conveyor = function() {
+
+  var treadmill_left = 84;
+  var treadmill_top = 192;
+  var left_of_treadmill;
+  var on_treadmill;
+  
+  // movement for all items
+  for (var i=0; i < items.ilist.length; i++) {
+
+    // calculate game board positions
+    left_of_treadmill = false;
+    if (items.ilist[i].x + items.defs[items.ilist[i].itype].w < treadmill_left) {
+      left_of_treadmill = true;
+    }
+
+    on_treadmill = false;      
+    if (items.ilist[i].y + items.defs[items.ilist[i].itype].h == treadmill_top) {
+      if (!left_of_treadmill) {
+        on_treadmill = true;
+      }
+    }
+    
+    if (on_treadmill) {
+      items.ilist[i].dx = 0;
+    }
+  }
 }
 
 items.logic_game_over = function() {
@@ -140,13 +167,6 @@ items.logic_game_over = function() {
   
   items.bounds_check();
 }
-
-// TODO: move to conveyor class
-items.conveyor_speed = function() {
-  if (items.conveyor_moving) return -1;
-  else return 0;
-}
-
 
 items.move = function() {
 
@@ -227,7 +247,7 @@ items.move = function() {
       if (landing) {
 
         // reset landed items to treadmill speed
-        items.ilist[i].dx = items.conveyor_speed();  
+        items.ilist[i].dx = conveyor.get_speed();
         items.ilist[i].dy = 0;
         
       }

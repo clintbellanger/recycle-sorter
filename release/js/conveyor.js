@@ -30,6 +30,11 @@ conveyor.init = function() {
 
 }
 
+conveyor.get_speed = function() {
+  if (conveyor.active) return -1;
+  else return 0;
+}
+
 conveyor.logic = function() {
 
   if (conveyor.active) {

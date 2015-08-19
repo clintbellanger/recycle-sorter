@@ -117,7 +117,7 @@ gamestate.render = function() {
       items.render();
       scorekeeper.render();
       particles.render();
-    
+      
       break;
       
     case gamestate.state_types.PLAY:    
