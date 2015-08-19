@@ -78,8 +78,7 @@ items.add_item = function(item_id) {
   new_item.itype = item_id;
   
   new_item.x = game_main.VIEW_WIDTH -1;    
-  var treadmill_top = 192;
-  new_item.y = treadmill_top - items.defs[new_item.itype].h;
+  new_item.y = conveyor.top - items.defs[new_item.itype].h;
 
   new_item.dx = conveyor.get_speed();  
   new_item.dy = 0;
@@ -124,8 +123,6 @@ items.item_flow = function() {
 
 items.halt_conveyor = function() {
 
-  var treadmill_left = 84;
-  var treadmill_top = 192;
   var left_of_treadmill;
   var on_treadmill;
   
@@ -134,12 +131,12 @@ items.halt_conveyor = function() {
 
     // calculate game board positions
     left_of_treadmill = false;
-    if (items.ilist[i].x + items.defs[items.ilist[i].itype].w < treadmill_left) {
+    if (items.ilist[i].x + items.defs[items.ilist[i].itype].w < conveyor.left) {
       left_of_treadmill = true;
     }
 
     on_treadmill = false;      
-    if (items.ilist[i].y + items.defs[items.ilist[i].itype].h == treadmill_top) {
+    if (items.ilist[i].y + items.defs[items.ilist[i].itype].h == conveyor.top) {
       if (!left_of_treadmill) {
         on_treadmill = true;
       }
@@ -169,10 +166,6 @@ items.logic_game_over = function() {
 }
 
 items.move = function() {
-
-  // TODO: move conveyor properties to the conveyor class
-  var treadmill_left = 84;
-  var treadmill_top = 192;
   
   // positional calculations
   var falling;
@@ -196,19 +189,19 @@ items.move = function() {
       
       // calculate game board positions
       left_of_treadmill = false;
-      if (items.ilist[i].x + items.defs[items.ilist[i].itype].w < treadmill_left) {
+      if (items.ilist[i].x + items.defs[items.ilist[i].itype].w < conveyor.left) {
         left_of_treadmill = true;
       }
 
       on_treadmill = false;      
-      if (items.ilist[i].y + items.defs[items.ilist[i].itype].h == treadmill_top) {
+      if (items.ilist[i].y + items.defs[items.ilist[i].itype].h == conveyor.top) {
         if (!left_of_treadmill) {
           on_treadmill = true;
         }
       }
       
       above_treadmill = false;
-      if (items.ilist[i].y + items.defs[items.ilist[i].itype].h < treadmill_top) {
+      if (items.ilist[i].y + items.defs[items.ilist[i].itype].h < conveyor.top) {
         if (!left_of_treadmill) {
           above_treadmill = true;
         }
@@ -225,10 +218,10 @@ items.move = function() {
       if (falling && above_treadmill) {
       
         // will this item fall past the treadmill top this frame?
-        if (items.ilist[i].y + items.defs[items.ilist[i].itype].h + items.ilist[i].dy >= treadmill_top) {
+        if (items.ilist[i].y + items.defs[items.ilist[i].itype].h + items.ilist[i].dy >= conveyor.top) {
         
            landing = true;
-           items.ilist[i].dy = treadmill_top - items.ilist[i].y - items.defs[items.ilist[i].itype].h;
+           items.ilist[i].dy = conveyor.top - items.ilist[i].y - items.defs[items.ilist[i].itype].h;
                    
         }
       }
@@ -468,9 +461,7 @@ items.render_single = function(item_id) {
   visible_height = items.defs[itype].h;
 
   // check going into the landfill bin  
-  // TODO: move conveyor properties to the conveyor class
-  var treadmill_left = 84;
-  if (items.ilist[item_id].x + items.defs[items.ilist[item_id].itype].w < treadmill_left) {
+  if (items.ilist[item_id].x + items.defs[items.ilist[item_id].itype].w < conveyor.left) {
       
     var landfill_top = 200;
     if (items.ilist[item_id].y + items.defs[items.ilist[item_id].itype].h > landfill_top) {
