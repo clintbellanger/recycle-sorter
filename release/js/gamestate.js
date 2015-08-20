@@ -122,10 +122,10 @@ gamestate.render = function() {
       
     case gamestate.state_types.PLAY:    
     
-      //bitfont.render("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", 8, 8, bitfont.JUSTIFY_LEFT);
-      //bitfont.render("the quick brown fox jumps over the lazy dog", 8, 20, bitfont.JUSTIFY_LEFT);
-      //bitfont.render("SPHINX OF BLACK QUARTZ, JUDGE MY VOW!", 8, 32, bitfont.JUSTIFY_LEFT);
-      //bitfont.render("sphinx of black quartz, judge my vow!", 8, 44, bitfont.JUSTIFY_LEFT);
+      //bitfont.render("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", 8, 80, bitfont.JUSTIFY_LEFT);
+      //bitfont.render("the quick brown fox jumps over the lazy dog", 8, 96, bitfont.JUSTIFY_LEFT);
+      //bitfont.render("SPHINX OF BLACK QUARTZ, JUDGE MY VOW!", 8, 112, bitfont.JUSTIFY_LEFT);
+      //bitfont.render("sphinx of black quartz, judge my vow!", 8, 128, bitfont.JUSTIFY_LEFT);
       
       conveyor.render();
       items.render();
@@ -149,8 +149,6 @@ gamestate.render = function() {
       else {
         bitfont.render("High Score: " + scorekeeper.current_high_score, 200, 112, bitfont.JUSTIFY_CENTER);
       }
-      
-      // bitfont.render("Refresh to try again.", 200, 128, bitfont.JUSTIFY_CENTER);
       
       if (items.ilist.length == 0) {
         title.render_button("Try Again", title.play_button_area);
