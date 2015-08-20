@@ -46,7 +46,7 @@ gamestate.logic = function() {
   
     case gamestate.state_types.TUTORIAL:
       imageset.logic();
-      conveyor.logic();   
+      conveyor.logic();
       items.logic();      
       scorekeeper.logic();
       tutorial.logic();
