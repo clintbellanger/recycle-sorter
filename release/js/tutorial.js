@@ -39,6 +39,8 @@ tutorial.init = function() {
   tutorial.hint_pos[tutorial.hint_types.PLASTIC]  = {x: 32,  y: 68};  
   tutorial.hint_pos[tutorial.hint_types.LANDFILL] = {x: 16,  y: 152};
   
+  tutorial.blink_duration = 20;
+  
   tutorial.reset();
   tutorial.load_tutorial();
 }
@@ -52,6 +54,8 @@ tutorial.reset = function() {
   tutorial.event_cursor = 0;
   tutorial.waiting_for_button = false;
   tutorial.current_hint = tutorial.hint_types.HIDDEN;
+  tutorial.hint_blinking = true;
+  tutorial.blink_timer = tutorial.blink_duration;
   
   tutorial.load_tutorial();
 }
@@ -150,6 +154,13 @@ tutorial.load_tutorial = function() {
 
 tutorial.logic = function() {
 
+  // animate blinking hint arrow
+  tutorial.blink_timer--;
+  if (tutorial.blink_timer == 0) {
+    tutorial.blink_timer = tutorial.blink_duration;
+    tutorial.hint_blinking = !tutorial.hint_blinking;
+  }
+
   // halt other logic if waiting for a new button press
   if (tutorial.waiting_for_button) {
     if (items.ilist.length == 0 && tutorial.pressing_button()) {
@@ -158,6 +169,8 @@ tutorial.logic = function() {
     else return;
   }
 
+  // process events  
+  
   tutorial.frame_timer++;
   tutorial.seconds_elapsed = Math.floor(tutorial.frame_timer / 60);
   
@@ -204,7 +217,11 @@ tutorial.render = function() {
 
 tutorial.render_hint = function() {
 
+  // if set to hidden, don't render
   if (tutorial.current_hint === tutorial.hint_types.HIDDEN) return;
+  
+  // don't draw if blinking
+  if (tutorial.hint_blinking) return;
 
   // only show hint if items are on screen
   if (items.ilist.length == 0) return;
