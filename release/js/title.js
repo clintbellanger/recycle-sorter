@@ -8,6 +8,7 @@ title.init = function() {
   
   title.tutorial_button_area = {x: 152, y: 132, w: 96, h: 28};
   title.play_button_area = {x: 152, y: 160, w: 96, h: 28};
+  title.fullscreen_area = {x: 352, y: 0, w: 48, h: 48};
   
   title.reset();
 }
@@ -24,6 +25,9 @@ title.check_buttons = function() {
     }
     else if (utils.is_within(inputs.mouse_pos, title.play_button_area)) {
       title.start_play = true;
+    }
+    else if (utils.is_within(inputs.mouse_pos, title.fullscreen_area)) {
+      utils.set_fullscreen("gamecanvas");
     }
   }
 }
