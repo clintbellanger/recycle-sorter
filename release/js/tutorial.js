@@ -93,10 +93,8 @@ tutorial.load_tutorial = function() {
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  2},
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_HINT,      option_id: tutorial.hint_types.LANDFILL},
     {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id: 15},
-    {trigger_time:  5, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
     {trigger_time:  5, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
-    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},    
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  3},
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_HINT,      option_id: tutorial.hint_types.GLASS},
     {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id:  6},
@@ -109,10 +107,8 @@ tutorial.load_tutorial = function() {
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  4},
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_HINT,      option_id: tutorial.hint_types.LANDFILL},
     {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id: 14},
-    {trigger_time:  5, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
     {trigger_time:  5, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
-    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},    
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  5},
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_HINT,      option_id: tutorial.hint_types.PAPER},
     {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id:  3},
@@ -125,10 +121,8 @@ tutorial.load_tutorial = function() {
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  6},
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_HINT,      option_id: tutorial.hint_types.LANDFILL},
     {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id: 13},
-    {trigger_time:  5, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
     {trigger_time:  5, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
 
-    {trigger_time:  0, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: true},        
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  7},
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_HINT,      option_id: tutorial.hint_types.PLASTIC},
     {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id:  0},
@@ -141,12 +135,13 @@ tutorial.load_tutorial = function() {
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  8},
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_HINT,      option_id: tutorial.hint_types.LANDFILL},
     {trigger_time:  2, event_type: tutorial.event_types.ADD_ITEM,       option_id: 12},
-    {trigger_time:  5, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},
     {trigger_time:  5, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
     
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_MESSAGE,   option_id:  9},
     {trigger_time:  0, event_type: tutorial.event_types.SHOW_HINT,      option_id: tutorial.hint_types.HIDDEN},
+    {trigger_time:  1, event_type: tutorial.event_types.CONVEYOR_STATE, option_id: false},        
     {trigger_time:  2, event_type: tutorial.event_types.NEXT_BUTTON,    option_id:  0},
+    
     {trigger_time:  0, event_type: tutorial.event_types.FINISHED,       option_id:  0}
   ];
     

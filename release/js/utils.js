@@ -38,15 +38,41 @@ utils.resize_canvas = function() {
   }
     
   // also reset scaling algorithm
-  utils.set_nearest_neighbor();
+  utils.set_nearest_neighbor(game_main.ctx);
 }
 
 /**
  * Browser settings so pixel art is crisp, not blurred
  */
-utils.set_nearest_neighbor = function() {
-  game_main.ctx.imageSmoothingEnabled = false;
-  game_main.ctx.webkitImageSmoothingEnabled = false;
-  game_main.ctx.mozImageSmoothingEnabled = false;
-  game_main.ctx.oImageSmoothingEnabled = false;  
+utils.set_nearest_neighbor = function(context_element) {
+  
+  if (context_element.imageSmoothingEnabled) {
+    context_element.imageSmoothingEnabled = false;
+  }
+  else if (context_element.webkitImageSmoothingEnabled) {
+    context_element.webkitImageSmoothingEnabled = false;
+  }
+  else if (context_element.mozImageSmoothingEnabled) {
+    context_element.mozImageSmoothingEnabled = false;
+  }
+  else if (context_element.oImageSmoothingEnabled) {
+    context_element.oImageSmoothingEnabled = false;
+  }
+}
+
+utils.set_fullscreen = function(element_name) {
+
+  var e = document.getElementById(element_name);
+  if (e.requestFullscreen) {
+    e.requestFullscreen();
+  }
+  else if (e.msRequestFullscreen) {
+    e.msRequestFullscreen();
+  }
+  else if (e.mozRequestFullScreen) {
+    e.mozRequestFullScreen();
+  }
+  else if (e.webkitRequestFullscreen) {
+    e.webkitRequestFullscreen();
+  }  
 }

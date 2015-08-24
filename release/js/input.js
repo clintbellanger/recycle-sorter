@@ -30,7 +30,7 @@ inputs.init = function() {
   inputs.locked.mouse = false;
 
   inputs.mouse_pos = {x:0, y:0};  
-  
+  inputs.fullscreen_area = {x: 352, y: 0, w: 48, h: 48};
 
   //---- Key Bindings -------------------------------------------------
   inputs.KEYCODE_UP     = 38; // arrow up
@@ -102,6 +102,12 @@ inputs.handleMouseDown = function(evt) {
   evt.preventDefault();
   inputs.pressing.mouse = true;
   inputs.mouse_pos = inputs.clickCoord(evt);
+  
+  // fullscreen?
+  // must be done in input event handler due to permissions(?)
+  // if (utils.is_within(inputs.mouse_pos, inputs.fullscreen_area)) {
+  //   utils.set_fullscreen("gamecanvas");
+  // }
 }
 
 inputs.handleMouseMove = function(evt) {

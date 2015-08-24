@@ -54,6 +54,8 @@ game_main.init = function() {
   gamestate.init();
   
   game_main.init_complete = true;
+  
+  
 }
 
 game_main.clear_canvas = function() {
