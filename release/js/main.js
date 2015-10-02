@@ -7,13 +7,6 @@ game_main.init = function() {
   game_main.init_complete = false;
   game_main.FPS = 60;
 
-  // Establish the main game loop
-  setInterval(function() {
-    if (!game_main.init_complete) return;
-    gamestate.logic();
-    gamestate.render();
-  }, 1000/game_main.FPS);
-
   // Configure the display  
   game_main.SCALE = 1;
   game_main.VIEW_WIDTH = 400;
@@ -54,7 +47,12 @@ game_main.init = function() {
   gamestate.init();
   
   game_main.init_complete = true;
-  
+
+  // Establish the main game loop
+  setInterval(function() {
+    gamestate.logic();
+    gamestate.render();
+  }, 1000/game_main.FPS);  
   
 }
 
