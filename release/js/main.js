@@ -44,6 +44,7 @@ game_main.init = function() {
   // Initialize all game units
   inputs.init();
   imageset.init();
+  soundset.init();
   bitfont.init();
   particles.init();
   conveyor.init();

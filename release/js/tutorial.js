@@ -19,6 +19,8 @@ tutorial.init = function() {
   tutorial.next_button = imageset.load("images/interface/arrow_button.png");
   tutorial.button_area = {x: 328, y: 88, w: 64, h: 42};
   
+  tutorial.click_id = soundset.load("sounds/click.wav");
+  
   tutorial.hint_types = {
     HIDDEN: 0,
     METAL: 1,
@@ -160,6 +162,7 @@ tutorial.logic = function() {
   if (tutorial.waiting_for_button) {
     if (items.ilist.length == 0 && tutorial.pressing_button()) {
       tutorial.waiting_for_button = false;
+      soundset.play(tutorial.click_id);
     }
     else return;
   }
