@@ -29,7 +29,9 @@ inputs.init = function() {
   inputs.locked.action = false;
   inputs.locked.mouse = false;
 
-  inputs.mouse_pos = {x:0, y:0};  
+  inputs.mouse_pos = {x:0, y:0};
+  inputs.mouse_throttle = false;
+  
   inputs.fullscreen_area = {x: 352, y: 0, w: 48, h: 48};
 
   //---- Key Bindings -------------------------------------------------
@@ -111,6 +113,7 @@ inputs.handleMouseDown = function(evt) {
 }
 
 inputs.handleMouseMove = function(evt) {
+  if (inputs.mouse_throttle) return;
   inputs.mouse_pos = inputs.clickCoord(evt);
 }
 
@@ -138,6 +141,10 @@ inputs.clickCoord = function(evt) {
   canx /= game_main.SCALE;
   cany /= game_main.SCALE;
   
+  // only capture first mousemove each frame
+  // cleared by gamestate
+  inputs.mouse_throttle = true;
+  
   return {x:canx, y:cany}  
 }
 
@@ -150,6 +157,7 @@ inputs.handleTouchStart = function(evt) {
 }
 
 inputs.handleTouchMove = function(evt) {
+  if (inputs.mouse_throttle) return;
   inputs.mouse_pos = inputs.touchCoord(evt);
 }
 

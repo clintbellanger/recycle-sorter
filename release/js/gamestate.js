@@ -22,6 +22,9 @@ gamestate.init = function() {
  
 gamestate.logic = function() {
 
+  // allow new mousemove calculations this frame
+  inputs.mouse_throttle = false;
+
   // no movement for a few frames to add weight to actions
   if (gamestate.impact_pause > 0) {
     gamestate.impact_pause--;
