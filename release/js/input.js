@@ -113,7 +113,6 @@ inputs.handleMouseDown = function(evt) {
 }
 
 inputs.handleMouseMove = function(evt) {
-  evt.preventDefault();
   if (inputs.mouse_throttle) return;
   inputs.mouse_pos = inputs.clickCoord(evt);
 }
@@ -159,7 +158,6 @@ inputs.handleTouchStart = function(evt) {
 }
 
 inputs.handleTouchMove = function(evt) {
-  evt.preventDefault();
   if (inputs.mouse_throttle) return;
   inputs.mouse_pos = inputs.touchCoord(evt);
 }
@@ -180,6 +178,9 @@ inputs.touchCoord = function(evt) {
   canx /= game_main.SCALE;
   cany /= game_main.SCALE;
   
+  // only capture first mousemove each frame
+  // cleared by gamestate  
   inputs.mouse_throttle = true;
+  
   return {x:canx, y:cany}  
 }
