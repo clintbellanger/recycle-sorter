@@ -113,11 +113,13 @@ inputs.handleMouseDown = function(evt) {
 }
 
 inputs.handleMouseMove = function(evt) {
+  evt.preventDefault();
   if (inputs.mouse_throttle) return;
   inputs.mouse_pos = inputs.clickCoord(evt);
 }
 
 inputs.handleMouseUp = function(evt) {
+  evt.preventDefault();
   inputs.pressing.mouse = false;
   inputs.locked.mouse = false;  
 }
@@ -157,11 +159,13 @@ inputs.handleTouchStart = function(evt) {
 }
 
 inputs.handleTouchMove = function(evt) {
+  evt.preventDefault();
   if (inputs.mouse_throttle) return;
   inputs.mouse_pos = inputs.touchCoord(evt);
 }
 
 inputs.handleTouchEnd = function(evt) {
+  evt.preventDefault();
   inputs.pressing.mouse = false;
   inputs.locked.mouse = false;
 }
@@ -176,5 +180,6 @@ inputs.touchCoord = function(evt) {
   canx /= game_main.SCALE;
   cany /= game_main.SCALE;
   
+  inputs.mouse_throttle = true;
   return {x:canx, y:cany}  
 }
